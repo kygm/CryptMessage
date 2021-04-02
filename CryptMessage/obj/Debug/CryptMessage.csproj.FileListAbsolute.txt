@@ -1,0 +1,14 @@
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\CryptMessage.exe
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\CryptMessage.pdb
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csprojAssemblyReference.cache
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\MainWindow.g.cs
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\App.g.cs
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage_MarkupCompile.cache
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage_MarkupCompile.lref
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\MainWindow.baml
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.g.resources
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.Properties.Resources.resources
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csproj.GenerateResource.cache
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csproj.CoreCompileInputs.cache
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.exe
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.pdb
