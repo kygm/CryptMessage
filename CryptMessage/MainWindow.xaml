@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Label>Can you see this test kenny?</Label>
-        <Label>Yes. U?</Label>
+        <Button RenderTransformOrigin="0.095,0.149">Test</Button>
+        <Label RenderTransformOrigin="0.031,0.154" Margin="10,0,-10.4,0">Yes. U?</Label>
     </Grid>
 </Window>
