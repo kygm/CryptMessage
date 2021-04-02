@@ -4,12 +4,20 @@
 winexe
 C#
 .cs
+<<<<<<< HEAD
 C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\
+=======
+C:\Users\ricke\Desktop\gitexample\CryptMessage\CryptMessage\CryptMessage\obj\Debug\
+>>>>>>> faa47840d8aa31aed1bec10a6623dc3e31c97917
 CryptMessage
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\App.xaml
+=======
+C:\Users\ricke\Desktop\gitexample\CryptMessage\CryptMessage\CryptMessage\App.xaml
+>>>>>>> faa47840d8aa31aed1bec10a6623dc3e31c97917
 11151548125
 
 61661639626

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+<<<<<<< HEAD
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -24,6 +25,11 @@
         </DockPanel>
         <Button x:Name="testButton" Content="Click me!" Click="testButton_Click" Width="50" Height="20" RenderTransformOrigin="-5.04,-5.875" Margin="10,24,732,375"></Button>
         <Label x:Name="testLabel" Content="Button clicked" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,49,0,0" Width="auto" Visibility="Hidden"/>
+=======
+        <Label>Can you see this test kenny?</Label>
+        <Button RenderTransformOrigin="0.095,0.149">Test</Button>
+        <Label RenderTransformOrigin="0.031,0.154" Margin="10,0,-10.4,0">Yes. U?</Label>
+>>>>>>> faa47840d8aa31aed1bec10a6623dc3e31c97917
     </Grid>
 
 </Window>
