@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptMessage", "CryptMessage\CryptMessage.csproj", "{0465876F-D6D4-4B77-93AA-7A8C864DB7E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptMessage", "CryptMessage\CryptMessage.csproj", "{6BC185CB-FA13-460F-BC4E-BE3EE9D7D922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0465876F-D6D4-4B77-93AA-7A8C864DB7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0465876F-D6D4-4B77-93AA-7A8C864DB7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0465876F-D6D4-4B77-93AA-7A8C864DB7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0465876F-D6D4-4B77-93AA-7A8C864DB7E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BC185CB-FA13-460F-BC4E-BE3EE9D7D922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BC185CB-FA13-460F-BC4E-BE3EE9D7D922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BC185CB-FA13-460F-BC4E-BE3EE9D7D922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BC185CB-FA13-460F-BC4E-BE3EE9D7D922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E37866E6-97A8-4B98-A340-B72D32C7C64D}
+		SolutionGuid = {14CC5906-5572-4D20-979B-D623A28D2E55}
 	EndGlobalSection
 EndGlobal

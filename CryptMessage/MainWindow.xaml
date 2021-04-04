@@ -22,8 +22,6 @@
             <TextBox AcceptsReturn="True" />
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
-        <Button x:Name="testButton" Content="Click me!" Click="testButton_Click" Width="50" Height="20" RenderTransformOrigin="-5.04,-5.875" Margin="10,24,732,375"></Button>
-        <Label x:Name="testLabel" Content="Button clicked" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,49,0,0" Width="auto" Visibility="Hidden"/>
+        <Label></Label>
     </Grid>
-
 </Window>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,19 +20,16 @@ namespace CryptMessage
     /// </summary>
     public partial class MainWindow : Window
     {
+
         bool home = true;//this var and others similar will hopefully be used to turn on and off elements belonging to different pages. 
         string page = "home";
         System.Windows.Visibility visible = Visibility.Visible;
         System.Windows.Visibility invisible = Visibility.Hidden;
 
-
-        
         public MainWindow()
         {
             InitializeComponent();
-
         }
-
         private void mnuAbout(object sender, RoutedEventArgs e)
         {
             page = "about";
@@ -55,16 +53,13 @@ namespace CryptMessage
         private void aboutVis(String page)
         {
             System.Windows.Visibility visState;
-            if (page == "about") {
+            if (page == "about")
+            {
                 visState = visible;
             }
             else { visState = invisible; }
             About1.Visibility = visState;
         }
-
-        private void testButton_Click(object sender, RoutedEventArgs e)
-        {
-            testLabel.Visibility = visible;
-        }
     }
+
 }
