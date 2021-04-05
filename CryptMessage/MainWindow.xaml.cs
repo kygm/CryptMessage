@@ -29,16 +29,29 @@ namespace CryptMessage
         public MainWindow()
         {
             InitializeComponent();
+            page = "home";
+            updatePages(page);
         }
         private void mnuAbout(object sender, RoutedEventArgs e)
         {
             page = "about";
             updatePages(page);
         }
+        private void mnuConversations(object sender, RoutedEventArgs e)
+        {
+            page = "conversations";
+            updatePages(page);
+        }
+        private void mnuSettings(object sender, RoutedEventArgs e)
+        {
+            page = "settings";
+            updatePages(page);
+        }
         private void updatePages(String page)
         {
             homeVis(page);
             aboutVis(page);
+            conversationListVis(page);
         }
         private void homeVis(String page)
         {//set the visibilty for each page in its own function, run if statement on the page name, adjust visibility accordingly.
@@ -48,7 +61,7 @@ namespace CryptMessage
                 visState = visible;
             }
             else { visState = invisible; }
-
+            ConvoList.Visibility = visState;
         }
         private void aboutVis(String page)
         {
@@ -59,6 +72,42 @@ namespace CryptMessage
             }
             else { visState = invisible; }
             About1.Visibility = visState;
+        }
+        private void conversationListVis(String page)
+        {
+            System.Windows.Visibility visState;
+            if (page == "conversations")
+            {
+                visState = visible;
+            }
+            else { visState = invisible; }
+            NewConvoCreateBtn.Visibility = visState;
+            DelConvoBtn.Visibility = visState;
+        }
+        
+        private void settingsVis(String page) {
+            System.Windows.Visibility visState;
+            if (page == "settings")
+            {
+                visState = visible;
+            }
+            else { visState = invisible; }
+        }
+        private void newConvoVis(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Visibility visState = NewConvoTitleLbl.Visibility;
+            if (visState == invisible)
+            {
+                visState = visible;
+            }
+            else if (visState == visible)
+            {
+                visState = invisible;
+            }
+            NewConvoTitleLbl.Visibility = visState;
+            NewConvoTitleTxtBox.Visibility = visState;
+            NewRecipientLbl.Visibility = visState;
+            NewRecipientTxtBox.Visibility = visState;
         }
     }
 
