@@ -22,6 +22,6 @@
             <TextBox AcceptsReturn="True" />
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
-        <Label></Label>
+        <Label x:Name="formloaded"></Label>
     </Grid>
 </Window>

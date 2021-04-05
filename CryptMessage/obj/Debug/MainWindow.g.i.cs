@@ -48,6 +48,14 @@ namespace CryptMessage {
         #line default
         #line hidden
         
+        
+        #line 25 "..\..\MainWindow.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Label formloaded;
+        
+        #line default
+        #line hidden
+        
         private bool _contentLoaded;
         
         /// <summary>
@@ -88,6 +96,9 @@ namespace CryptMessage {
             return;
             case 2:
             this.About1 = ((System.Windows.Controls.Label)(target));
+            return;
+            case 3:
+            this.formloaded = ((System.Windows.Controls.Label)(target));
             return;
             }
             this._contentLoaded = true;
