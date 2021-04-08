@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptMessage"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" DragEnter="Window_DragEnter" MouseLeave="Window_MouseLeave" Deactivated="Window_Deactivated" LostFocus="Window_LostFocus" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" Drop="Window_Drop">
     <Grid>
         <DockPanel Margin="0,0,9.6,10">
             <Menu DockPanel.Dock="Top">
@@ -20,20 +20,18 @@
                 <MenuItem Header="Conversations" Click="mnuConversations"/>
                 <MenuItem Header="About" Click="mnuAbout"/>
             </Menu>
-            <TextBox AcceptsReturn="True" />
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
-        <Label Margin="3,0,-3,0"/>
         <TextBox x:Name="MsgTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="527" Margin="142,386,0,0" Visibility="Visible"/>
         <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="688,386,0,0" Visibility="Visible"/>
-        <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,39,0,0" Visibility="Hidden"/>
+        <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,39,0,0" Visibility="Visible"/>
         <TextBox x:Name="NewConvoTitleTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Margin="212,45,0,0" Visibility="Hidden"/>
         <Label x:Name="NewConvoTitleLbl" Content="Title" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="142,50,0,0" Visibility="Hidden" RenderTransformOrigin="-5.442,0.78"/>
         <TextBox x:Name="NewRecipientTxtBox" HorizontalAlignment="Left" Height="36" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Margin="212,84,0,0" Visibility="Hidden"/>
         <Label x:Name="NewRecipientLbl" Content="Recipient/s" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="131,89,0,0" Visibility="Hidden"/>
-        <Button x:Name="NewConvoCreateBtn" Content="Create Converstation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,70,0,0" Visibility="Hidden" IsEnabled="False"/>
-        <Button x:Name="DelConvoBtn" Content="Delete Conversation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,100,0,0" Visibility="Hidden" IsEnabled="False"/>
-        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" Height="385" VerticalAlignment="Top" Width="100" Margin="10,24,0,0">
+        <Button x:Name="NewConvoCreateBtn" Content="Create Converstation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,70,0,0" Visibility="Visible" IsEnabled="False"/>
+        <Button x:Name="DelConvoBtn" Content="Delete Conversation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,100,0,0" Visibility="Visible" IsEnabled="False"/>
+        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" Height="385" VerticalAlignment="Top" Width="100" Margin="0,21,0,0">
             <ListBoxItem Content="convo 1"/>
             <ListBoxItem Content="convo 2"/>
             <ListBoxItem Content="convo 3"/>
@@ -41,5 +39,7 @@
             <ListBoxItem Content="convo 5"/>
             <ListBoxItem Content="convo 6"/>
         </ListBox>
+        <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="142,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
+        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
     </Grid>
 </Window>
