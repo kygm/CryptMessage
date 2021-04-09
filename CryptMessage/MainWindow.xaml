@@ -22,6 +22,9 @@
             </Menu>
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
+        <Label x:Name="formloaded">
+            </Label>
+        <Label Margin="3,0,-3,0"/>
         <TextBox x:Name="MsgTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="527" Margin="142,386,0,0" Visibility="Visible"/>
         <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="688,386,0,0" Visibility="Visible"/>
         <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,39,0,0" Visibility="Visible"/>
