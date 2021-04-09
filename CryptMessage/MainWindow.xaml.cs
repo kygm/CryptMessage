@@ -18,11 +18,15 @@ namespace CryptMessage
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// thinking of using the dragEnter and Drop properties to prevent screenshots, more info later
+    /// may also use lostFocus
+
+
     public partial class MainWindow : Window
     {
 
         bool home = true;//this var and others similar will hopefully be used to turn on and off elements belonging to different pages. 
-        string page = "home";
+        string page = "";
         System.Windows.Visibility visible = Visibility.Visible;
         System.Windows.Visibility invisible = Visibility.Hidden;
 
@@ -52,6 +56,7 @@ namespace CryptMessage
             homeVis(page);
             aboutVis(page);
             conversationListVis(page);
+            settingsVis(page);
         }
         private void homeVis(String page)
         {//set the visibilty for each page in its own function, run if statement on the page name, adjust visibility accordingly.
@@ -62,6 +67,8 @@ namespace CryptMessage
             }
             else { visState = invisible; }
             ConvoList.Visibility = visState;
+            MsgTxtBox.Visibility = visState;
+            MsgSendBtn.Visibility = visState;
         }
         private void aboutVis(String page)
         {
@@ -109,6 +116,52 @@ namespace CryptMessage
             NewRecipientLbl.Visibility = visState;
             NewRecipientTxtBox.Visibility = visState;
         }
+
+        private void Window_DragEnter(object sender, DragEventArgs e)//prevent copy paste
+        {
+            var pageView = "blank";
+            updatePages(pageView);
+        }
+
+        private void Window_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var pageView = "blank";
+            updatePages(pageView);
+        }
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            var pageView = "blank";
+            updatePages(pageView);
+        }
+        private void Window_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var pageView = "blank";
+            updatePages(pageView);
+        }
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)
+                || Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin)
+                || Keyboard.IsKeyDown(Key.Print) || Keyboard.IsKeyDown(Key.PrintScreen)
+                || Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                var pageView = "blank";
+                updatePages(pageView);
+            }
+        }
+        private void Window_Activated(object sender, EventArgs e){ updatePages(page); }
+        private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyUp(Key.LeftCtrl) || Keyboard.IsKeyUp(Key.RightCtrl)
+                || Keyboard.IsKeyUp(Key.LWin) || Keyboard.IsKeyUp(Key.RWin)
+                || Keyboard.IsKeyUp(Key.Print) || Keyboard.IsKeyUp(Key.PrintScreen)
+                || Keyboard.IsKeyUp(Key.LeftAlt) || Keyboard.IsKeyUp(Key.RightAlt))
+            {
+                updatePages(page);
+            }
+        }
+        
     }
 
 }
