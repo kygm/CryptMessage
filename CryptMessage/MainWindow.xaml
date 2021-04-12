@@ -24,7 +24,6 @@
         </DockPanel>
         <Label x:Name="formloaded">
             </Label>
-        <Label Margin="3,0,-3,0"/>
         <TextBox x:Name="MsgTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="527" Margin="142,386,0,0" Visibility="Visible"/>
         <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="688,386,0,0" Visibility="Visible"/>
         <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="635,39,0,0" Visibility="Visible"/>
@@ -44,5 +43,9 @@
         </ListBox>
         <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="142,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
         <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
+        <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,141,0,0"/>
+        <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Margin="280,145,0,0"/>
+        <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,172,0,0"/>
+        <PasswordBox x:Name="loginPassBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,180,0,0" Width="120"PasswordChar="*"/>
     </Grid>
 </Window>

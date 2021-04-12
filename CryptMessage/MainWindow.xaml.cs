@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -57,6 +58,7 @@ namespace CryptMessage
             aboutVis(page);
             conversationListVis(page);
             settingsVis(page);
+            loginVis(page);
         }
         private void homeVis(String page)
         {//set the visibilty for each page in its own function, run if statement on the page name, adjust visibility accordingly.
@@ -91,7 +93,6 @@ namespace CryptMessage
             NewConvoCreateBtn.Visibility = visState;
             DelConvoBtn.Visibility = visState;
         }
-        
         private void settingsVis(String page) {
             System.Windows.Visibility visState;
             if (page == "settings")
@@ -115,6 +116,15 @@ namespace CryptMessage
             NewConvoTitleTxtBox.Visibility = visState;
             NewRecipientLbl.Visibility = visState;
             NewRecipientTxtBox.Visibility = visState;
+        }
+        private void loginVis(string page)
+        {
+            System.Windows.Visibility visState;
+            if (page == "login")
+            {
+                visState = visible;
+            }
+            else { visState = invisible; }
         }
 
         private void Window_DragEnter(object sender, DragEventArgs e)//prevent copy paste
@@ -143,7 +153,8 @@ namespace CryptMessage
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)
                 || Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin)
                 || Keyboard.IsKeyDown(Key.Print) || Keyboard.IsKeyDown(Key.PrintScreen)
-                || Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                || Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)
+                || Keyboard.IsKeyDown(Key.Execute) || Keyboard.IsKeyUp(Key.Insert))
             {
                 var pageView = "blank";
                 updatePages(pageView);
@@ -156,12 +167,12 @@ namespace CryptMessage
             if (Keyboard.IsKeyUp(Key.LeftCtrl) || Keyboard.IsKeyUp(Key.RightCtrl)
                 || Keyboard.IsKeyUp(Key.LWin) || Keyboard.IsKeyUp(Key.RWin)
                 || Keyboard.IsKeyUp(Key.Print) || Keyboard.IsKeyUp(Key.PrintScreen)
-                || Keyboard.IsKeyUp(Key.LeftAlt) || Keyboard.IsKeyUp(Key.RightAlt))
+                || Keyboard.IsKeyUp(Key.LeftAlt) || Keyboard.IsKeyUp(Key.RightAlt)
+                ||Keyboard.IsKeyUp(Key.Execute) || Keyboard.IsKeyUp(Key.Insert))
             {
                 updatePages(page);
             }
         }
-        
     }
 
 }
