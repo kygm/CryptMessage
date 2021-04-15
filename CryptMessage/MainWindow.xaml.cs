@@ -34,32 +34,48 @@ namespace CryptMessage
         public MainWindow()
         {
             InitializeComponent();
-            page = "home";
-            updatePages(page);
-        }
-        private void mnuAbout(object sender, RoutedEventArgs e)
-        {
-            page = "about";
-            updatePages(page);
-        }
-        private void mnuConversations(object sender, RoutedEventArgs e)
-        {
-            page = "conversations";
-            updatePages(page);
-        }
-        private void mnuSettings(object sender, RoutedEventArgs e)
-        {
-            page = "settings";
+            page = "login";
             updatePages(page);
         }
         private void updatePages(String page)
         {
+            bool menuVis;
+            if (page == "login"){ 
+                menuVis = false; 
+            } else { menuVis = true; }
+            SettingsMnu.IsEnabled = menuVis;
+            HomeMnu.IsEnabled = menuVis;
+            ConversationsMnu.IsEnabled = menuVis;
+
             homeVis(page);
             aboutVis(page);
-            conversationListVis(page);
+            convoManageVis(page);
             settingsVis(page);
             loginVis(page);
         }
+
+        //page switching functions
+        private void SettingsMnu_Click(object sender, RoutedEventArgs e)
+        {
+            page = "settings";
+            updatePages(page);
+        }
+        private void HomeMnu_Click(object sender, RoutedEventArgs e)
+        {
+            page = "home";
+            updatePages(page);
+        }
+        private void ConversationsMnu_Click(object sender, RoutedEventArgs e)
+        {
+            page = "conversations";
+            updatePages(page);
+        }
+        private void AboutMnu_Click(object sender, RoutedEventArgs e)
+        {
+            page = "about";
+            updatePages(page);
+        }
+        
         private void homeVis(String page)
         {//set the visibilty for each page in its own function, run if statement on the page name, adjust visibility accordingly.
             System.Windows.Visibility visState;
@@ -83,7 +99,7 @@ namespace CryptMessage
             else { visState = invisible; }
             About1.Visibility = visState;
         }
-        private void conversationListVis(String page)
+        private void convoManageVis(String page)
         {
             System.Windows.Visibility visState;
             if (page == "conversations")
@@ -91,6 +107,7 @@ namespace CryptMessage
                 visState = visible;
             }
             else { visState = invisible; }
+            AddConvoBtn.Visibility = visState;
             NewConvoCreateBtn.Visibility = visState;
             DelConvoBtn.Visibility = visState;
         }
@@ -133,6 +150,7 @@ namespace CryptMessage
             LoginBtn.Visibility = visState;
         }
 
+        //window privacy functions
         private void Window_DragEnter(object sender, DragEventArgs e)//prevent copy paste
         {
             var pageView = "blank";
@@ -158,30 +176,27 @@ namespace CryptMessage
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)
                 || Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin)
                 || Keyboard.IsKeyDown(Key.Print) || Keyboard.IsKeyDown(Key.PrintScreen)
-                || Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)
-                || Keyboard.IsKeyDown(Key.Execute) || Keyboard.IsKeyUp(Key.Insert))
+                || Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
             {
                 var pageView = "blank";
                 updatePages(pageView);
             }
         }
-        private void Window_Activated(object sender, EventArgs e){ updatePages(page); }
-        private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyUp(Key.LeftCtrl) || Keyboard.IsKeyUp(Key.RightCtrl)
                 || Keyboard.IsKeyUp(Key.LWin) || Keyboard.IsKeyUp(Key.RWin)
                 || Keyboard.IsKeyUp(Key.Print) || Keyboard.IsKeyUp(Key.PrintScreen)
-                || Keyboard.IsKeyUp(Key.LeftAlt) || Keyboard.IsKeyUp(Key.RightAlt)
-                ||Keyboard.IsKeyUp(Key.Execute) || Keyboard.IsKeyUp(Key.Insert))
+                || Keyboard.IsKeyUp(Key.LeftAlt) || Keyboard.IsKeyUp(Key.RightAlt))
             {
                 updatePages(page);
             }
         }
-        private void Window_MouseEnter(object sender, MouseEventArgs e)
-        {
-            updatePages(page);
-        }
+        private void Window_MouseEnter(object sender, MouseEventArgs e){ updatePages(page); }
+        private void Window_Activated(object sender, EventArgs e) { updatePages(page); }
+        private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
+
+        
     }
 
 }
