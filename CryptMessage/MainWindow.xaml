@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptMessage"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" DragEnter="Window_DragEnter" MouseLeave="Window_MouseLeave" Deactivated="Window_Deactivated" LostFocus="Window_LostFocus" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" Drop="Window_Drop">
+        Title="MainWindow" Height="450" Width="800" DragEnter="Window_DragEnter" MouseLeave="Window_MouseLeave" Deactivated="Window_Deactivated" LostFocus="Window_LostFocus" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" Drop="Window_Drop" MouseEnter="Window_MouseEnter">
     <Grid>
         <DockPanel Margin="0,0,9.6,10">
             <Menu DockPanel.Dock="Top">

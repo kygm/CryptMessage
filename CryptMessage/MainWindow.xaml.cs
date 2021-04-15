@@ -178,6 +178,10 @@ namespace CryptMessage
                 updatePages(page);
             }
         }
+        private void Window_MouseEnter(object sender, MouseEventArgs e)
+        {
+            updatePages(page);
+        }
     }
 
 }
