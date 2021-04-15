@@ -44,8 +44,10 @@
         <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="142,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
         <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,291,0,0" RenderTransformOrigin="0.553,1.962" Width="57"/>
         <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,141,0,0"/>
-        <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Margin="280,145,0,0"/>
+        <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Margin="280,145,0,0"/>
         <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="212,172,0,0"/>
-        <PasswordBox x:Name="loginPassBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,180,0,0" Width="120"PasswordChar="*"/>
+        <PasswordBox x:Name="loginPassBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,180,0,0" Width="120" PasswordChar="*"/>
+        <Label x:Name="UsernameDisplayLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="115,24,0,0"/>
+        <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="212,216,0,0"/>
     </Grid>
 </Window>

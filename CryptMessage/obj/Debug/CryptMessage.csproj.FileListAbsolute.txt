@@ -32,3 +32,4 @@ C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage
 C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csproj.CopyComplete
 C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.exe
 C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.pdb
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csprojAssemblyReference.cache

@@ -71,6 +71,7 @@ namespace CryptMessage
             ConvoList.Visibility = visState;
             MsgTxtBox.Visibility = visState;
             MsgSendBtn.Visibility = visState;
+            UsernameDisplayLbl.Visibility = visState;
         }
         private void aboutVis(String page)
         {
@@ -125,6 +126,11 @@ namespace CryptMessage
                 visState = visible;
             }
             else { visState = invisible; }
+            usernameLbl.Visibility = visState;
+            usernameTxtBox.Visibility = visState;
+            loginPasswordLbl.Visibility = visState;
+            loginPassBox.Visibility = visState;
+            LoginBtn.Visibility = visState;
         }
 
         private void Window_DragEnter(object sender, DragEventArgs e)//prevent copy paste
@@ -132,7 +138,6 @@ namespace CryptMessage
             var pageView = "blank";
             updatePages(pageView);
         }
-
         private void Window_MouseLeave(object sender, MouseEventArgs e)
         {
             var pageView = "blank";
