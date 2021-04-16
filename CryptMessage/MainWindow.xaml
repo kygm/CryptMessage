@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptMessage"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" DragEnter="Window_DragEnter" MouseLeave="Window_MouseLeave" Deactivated="Window_Deactivated" LostFocus="Window_LostFocus" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" Drop="Window_Drop" MouseEnter="Window_MouseEnter">
+        Title="MainWindow" Height="450" Width="800" MouseLeave="Window_MouseLeave" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" MouseEnter="Window_MouseEnter" Drop="Window_Drop" Deactivated="Window_Deactivated">
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -81,7 +81,7 @@
         <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True"/>
         <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="4" Margin="0,-2,0,0"/>
         <PasswordBox x:Name="loginPassBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" PasswordChar="*" Grid.Row="10" Grid.Column="5" Grid.RowSpan="2" Grid.IsSharedSizeScope="True"/>
-        <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="238"/>
+        <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="238" Click="LoginBtn_Click"/>
 
 
     </Grid>

@@ -166,11 +166,6 @@ namespace CryptMessage
             var pageView = "blank";
             updatePages(pageView);
         }
-        private void Window_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var pageView = "blank";
-            updatePages(pageView);
-        }
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)
@@ -196,7 +191,14 @@ namespace CryptMessage
         private void Window_Activated(object sender, EventArgs e) { updatePages(page); }
         private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
 
-        
+        private void LoginBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (usernameTxtBox.Text == "admin" && loginPassBox.Password == "password1")
+            {
+                page = "home";
+                updatePages(page);
+            }
+        }
     }
 
 }
