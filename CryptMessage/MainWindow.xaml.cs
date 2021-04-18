@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace CryptMessage
 {
@@ -25,14 +28,31 @@ namespace CryptMessage
 
     public partial class MainWindow : Window
     {
-
+        static readonly HttpClient client = new HttpClient();
+        Uri server = new Uri("https://crypt-message.herokuapp.com/");
+        
         bool home = true;//this var and others similar will hopefully be used to turn on and off elements belonging to different pages. 
         string page = "";
         System.Windows.Visibility visible = Visibility.Visible;
         System.Windows.Visibility invisible = Visibility.Hidden;
 
+        private static async Task<char> Main()
+        {
+
+            try
+            {
+                string responseBody = await client.GetStringAsync("https://crypt-message.herokuapp.com/");
+                Console.WriteLine(responseBody);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!\nMessage: {0}", e.Message);
+            }
+            return 'a';
+        }
         public MainWindow()
         {
+            client.BaseAddress = server;
             InitializeComponent();
             page = "login";
             updatePages(page);
@@ -88,6 +108,8 @@ namespace CryptMessage
             MsgTxtBox.Visibility = visState;
             MsgSendBtn.Visibility = visState;
             UsernameDisplayLbl.Visibility = visState;
+            SendToLbl.Visibility = visState;
+            SendToTxt.Visibility = visState;
         }
         private void aboutVis(String page)
         {
@@ -191,14 +213,36 @@ namespace CryptMessage
         private void Window_Activated(object sender, EventArgs e) { updatePages(page); }
         private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
 
+        //UI control functions
         private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
             if (usernameTxtBox.Text == "admin" && loginPassBox.Password == "password1")
             {
                 page = "home";
                 updatePages(page);
+                UsernameDisplayLbl.Content=usernameTxtBox.Text;
             }
         }
+        private void MsgSendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var values = new Dictionary<string, string>
+            {
+                { "senUsername",UsernameDisplayLbl.Content.ToString()},
+                { "recUsername",SendToTxt.Text},
+                { "message",MsgTxtBox.Text},
+                { "dateEntered",""}
+            };
+            var json =JsonConvert.SerializeObject(values, Newtonsoft.Json.Formatting.Indented);
+            var messageDetails = new StringContent(json);
+            
+            client.PostAsync(UsernameDisplayLbl.Content.ToString()+","+ SendToTxt.Text+","+ MsgTxtBox.Text, messageDetails);
+        }
+        //private void checkForMsg()
+        //{
+        //    string msg = null;
+        //    Dictionary<string,string>inMsg=
+        //    var result=JsonConvert.DeserializeObject()
+        //}
     }
-
 }

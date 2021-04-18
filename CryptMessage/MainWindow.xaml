@@ -57,9 +57,9 @@
             </Menu>
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
-        <Label x:Name="UsernameDisplayLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,-2,0,0"/>
+        <Label x:Name="UsernameDisplayLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,-3,0,0"/>
         <TextBox x:Name="MsgTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="527" Visibility="Visible" Grid.Row="18" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="8"/>
-        <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Visibility="Visible" Grid.Row="18" Grid.Column="10" Grid.RowSpan="2"/>
+        <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Visibility="Visible" Grid.Row="18" Grid.Column="10" Grid.RowSpan="2" Click="MsgSendBtn_Click"/>
         <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Visibility="Visible" Grid.Row="1" Grid.Column="9" Grid.ColumnSpan="2"/>
         <Button x:Name="NewConvoCreateBtn" Content="Create Converstation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Visibility="Visible" IsEnabled="False" Grid.Row="2" Grid.Column="9" Grid.ColumnSpan="2"/>
         <Button x:Name="DelConvoBtn" Content="Delete Conversation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Visibility="Visible" IsEnabled="False" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2"/>
@@ -75,13 +75,16 @@
             <ListBoxItem Content="convo 5"/>
             <ListBoxItem Content="convo 6"/>
         </ListBox>
-        <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="2" Margin="0"/>
-        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="3" Grid.Row="16" Grid.ColumnSpan="6"/>
+        <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Visible" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
+        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Visible
+               " Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.794,0.577" Grid.Row="9" Grid.Column="4" Height="23" Margin="0,-2,0,0" Grid.RowSpan="2"/>
         <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True"/>
         <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="4" Margin="0,-2,0,0"/>
         <PasswordBox x:Name="loginPassBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" PasswordChar="*" Grid.Row="10" Grid.Column="5" Grid.RowSpan="2" Grid.IsSharedSizeScope="True"/>
         <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="238" Click="LoginBtn_Click"/>
+        <Label x:Name="SendToLbl"  Content="Send To:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="16" Grid.RowSpan="2" Grid.Column="1" Margin="0,16,0,0"/>
+        <TextBox x:Name="SendToTxt"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2" Grid.Row="17"/>
 
 
     </Grid>
