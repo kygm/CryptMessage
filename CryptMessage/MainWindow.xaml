@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CryptMessage"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MouseLeave="Window_MouseLeave" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" MouseEnter="Window_MouseEnter" Drop="Window_Drop" Deactivated="Window_Deactivated">
-    <Grid ShowGridLines="False">
+    <Grid ShowGridLines="False" Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -75,8 +75,8 @@
             <ListBoxItem Content="convo 5"/>
             <ListBoxItem Content="convo 6"/>
         </ListBox>
-        <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Visible" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
-        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Visible
+        <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
+        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden
                " Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.794,0.577" Grid.Row="9" Grid.Column="4" Height="23" Margin="0,-2,0,0" Grid.RowSpan="2"/>
         <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True"/>
@@ -85,9 +85,8 @@
         <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="238" Click="LoginBtn_Click"/>
         <Label x:Name="SendToLbl"  Content="Send To:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="16" Grid.RowSpan="2" Grid.Column="1" Margin="0,16,0,0"/>
         <TextBox x:Name="SendToTxt"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2" Grid.Row="17"/>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75"/>
-        <Label x:Name="LblLoginStatus" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="23" Margin="3.2,18.6,0,0" Grid.Row="7" Grid.RowSpan="2" VerticalAlignment="Top" Width="74"/>
-        <Label x:Name="debugLabel" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="24" Margin="5.2,17,0,0" Grid.Row="4" Grid.RowSpan="2" VerticalAlignment="Top" Width="66"/>
+        <Label x:Name="LoginStatusLbl" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="6" VerticalAlignment="Top" Width="74" Margin="0,18,0,0" Grid.RowSpan="3"/>
+        <Label x:Name="debugLbl" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="26" Margin="0,18,0,0" Grid.Row="4" Grid.RowSpan="3" VerticalAlignment="Top" Width="155" Grid.ColumnSpan="2"/>
 
 
     </Grid>
