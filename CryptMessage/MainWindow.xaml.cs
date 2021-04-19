@@ -25,12 +25,28 @@ namespace CryptMessage
     /// thinking of using the dragEnter and Drop properties to prevent screenshots, more info later
     /// may also use lostFocus
 
+    class User
+    {
+        public string username;
+        public string password;
+
+        public User(string u, string p)
+        {
+            username = u;
+            password = p;
+        }
+        public override string ToString()
+        {
+            return "Username: " + username + "\n Password: " + password;
+        }
+
+    }
 
     public partial class MainWindow : Window
     {
         static readonly HttpClient client = new HttpClient();
         Uri server = new Uri("https://crypt-message.herokuapp.com/");
-        
+        private const string url = "https://crypt-message.herokuapp.com/";
         bool home = true;//this var and others similar will hopefully be used to turn on and off elements belonging to different pages. 
         string page = "";
         System.Windows.Visibility visible = Visibility.Visible;
@@ -201,6 +217,7 @@ namespace CryptMessage
         }
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
+            
             if (Keyboard.IsKeyUp(Key.LeftCtrl) || Keyboard.IsKeyUp(Key.RightCtrl)
                 || Keyboard.IsKeyUp(Key.LWin) || Keyboard.IsKeyUp(Key.RWin)
                 || Keyboard.IsKeyUp(Key.Print) || Keyboard.IsKeyUp(Key.PrintScreen)
@@ -214,14 +231,50 @@ namespace CryptMessage
         private void Window_Drop(object sender, DragEventArgs e) { updatePages(page); }
 
         //UI control functions
-        private void LoginBtn_Click(object sender, RoutedEventArgs e)
+        private async void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (usernameTxtBox.Text == "admin" && loginPassBox.Password == "password1")
+            string username = usernameTxtBox.Text;
+            string password = loginPassBox.Password.ToString();
+            var user = new User(username, password);
+
+            var json = JsonConvert.SerializeObject(user);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+
+            var res = await client.PostAsync(url + "login", data);
+            Console.WriteLine(user.ToString());
+
+            var body = res.Content.ReadAsStringAsync().Result;
+            debugLabel.Content = body.ToString();
+            Console.WriteLine(body.ToString());
+
+            bool auth;
+
+
+            if (body.Equals("Yes"))
             {
+                //setting visibiilty status to invisible for login status
+                LblLoginStatus.Visibility = invisible;
+                Console.WriteLine("User authenticated");
                 page = "home";
                 updatePages(page);
                 UsernameDisplayLbl.Content=usernameTxtBox.Text;
             }
+            else if (body.Equals("No"))
+            {
+                LblLoginStatus.Content = "Incorrect Password!";
+            }
+            else if(body.ToString() == "No user found!")
+            {
+                LblLoginStatus.Content = "No User Found!";
+            }
+            else
+            {
+                LblLoginStatus.Content = "Server Error!";
+            }
+            
+           
+ 
         }
         private void MsgSendBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -238,6 +291,7 @@ namespace CryptMessage
             
             client.PostAsync(UsernameDisplayLbl.Content.ToString()+","+ SendToTxt.Text+","+ MsgTxtBox.Text, messageDetails);
         }
+
         //private void checkForMsg()
         //{
         //    string msg = null;
