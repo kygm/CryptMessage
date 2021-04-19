@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -39,7 +40,22 @@ namespace CryptMessage
         {
             return "Username: " + username + "\n Password: " + password;
         }
-
+    }
+    class Message
+    {
+        public string senUsername,recUsername,message;
+        public DateTime dateEntered;
+        public Message(string sender, string reciever, string mess,DateTime entered)
+        {
+            senUsername = sender;
+            recUsername = reciever;
+            message = mess;
+            dateEntered =entered;
+        }
+        public override string ToString()
+        {
+            return "From: "+senUsername+"\n To: "+recUsername+"\n Message: "+message;
+        }
     }
 
     public partial class MainWindow : Window
@@ -252,6 +268,7 @@ namespace CryptMessage
                 page = "home";
                 updatePages(page);
                 UsernameDisplayLbl.Content=usernameTxtBox.Text;
+                checkMsg();
             }
             else if (body.Equals("No"))
             {
@@ -266,30 +283,47 @@ namespace CryptMessage
                 LoginStatusLbl.Content = "Server Error!";
             }
             
-           
- 
         }
-        private void MsgSendBtn_Click(object sender, RoutedEventArgs e)
+        private async void MsgSendBtn_Click(object sender, RoutedEventArgs e)
         {
-            
-            var values = new Dictionary<string, string>
-            {
-                { "senUsername",UsernameDisplayLbl.Content.ToString()},
-                { "recUsername",SendToTxt.Text},
-                { "message",MsgTxtBox.Text},
-                { "dateEntered",""}
-            };
-            var json =JsonConvert.SerializeObject(values, Newtonsoft.Json.Formatting.Indented);
-            var messageDetails = new StringContent(json);
-            
-            client.PostAsync(UsernameDisplayLbl.Content.ToString()+","+ SendToTxt.Text+","+ MsgTxtBox.Text, messageDetails);
-        }
+            string sen = UsernameDisplayLbl.Content.ToString(), 
+                rec = SendToTxt.Text, 
+                mes = MsgTxtBox.Text;
+            Message msg = new Message(sen, rec, mes, DateTime.Now);
+            string json = JsonConvert.SerializeObject(msg);
+            var msgData = new StringContent(json, Encoding.UTF8, "application/json");
 
-        //private void checkForMsg()
-        //{
-        //    string msg = null;
-        //    Dictionary<string,string>inMsg=
-        //    var result=JsonConvert.DeserializeObject()
-        //}
+            var res = await client.PostAsync(url + "messages", msgData);
+            string body = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(body);
+            if (body.Contains("senUsername"))
+            {
+                Console.WriteLine("Message Sent");
+            }
+            else 
+            {
+                Console.WriteLine("Message Failed");
+            }
+        }
+        private Timer timer1;
+        public void checkMsg()
+        {
+            timer1 = new Timer();
+            timer1.Elapsed+= new ElapsedEventHandler(getMsg);
+            timer1.Interval = 5000;
+            timer1.Start();
+        }
+        private async void getMsg(object sender, EventArgs e)
+        {
+            //string userName = UsernameDisplayLbl.Content.ToString();
+            var res = await client.GetAsync(url + "messages");
+            string body = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(body);
+            if (body.Contains("\"recUsername\":\"admin\""))
+            {
+                Console.WriteLine("Message Recieved");
+            }
+            
+        }
     }
 }
