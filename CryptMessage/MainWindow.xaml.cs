@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using Newtonsoft.Json;
 
@@ -39,6 +40,14 @@ namespace CryptMessage
         public override string ToString()
         {
             return "Username: " + username + "\n Password: " + password;
+        }
+    }
+    class usr
+    {
+        public string username;
+        public usr(string u)
+        {
+            username = u;
         }
     }
     class Message
@@ -67,6 +76,9 @@ namespace CryptMessage
         string page = "";
         System.Windows.Visibility visible = Visibility.Visible;
         System.Windows.Visibility invisible = Visibility.Hidden;
+        User curUser = new User(null,null);
+        string theUser;
+
         public MainWindow()
         {
             client.BaseAddress = server;
@@ -109,6 +121,12 @@ namespace CryptMessage
                 UsernameDisplayLbl.Visibility = visState;
                 SendToLbl.Visibility = visState;
                 SendToTxt.Visibility = visState;
+            user1Lbl.Visibility = visState;
+            user2Lbl.Visibility = visState;
+            user3Lbl.Visibility = visState;
+            msg1Lbl.Visibility = visState;
+            msg2Lbl.Visibility = visState;
+            msg3Lbl.Visibility = visState;
             }
             private void aboutVis(String page)
             {
@@ -267,7 +285,9 @@ namespace CryptMessage
                 Console.WriteLine("User authenticated");
                 page = "home";
                 updatePages(page);
-                UsernameDisplayLbl.Content=usernameTxtBox.Text;
+                curUser.username = usernameTxtBox.Text;
+                theUser = curUser.username;
+                UsernameDisplayLbl.Content=theUser;
                 checkMsg();
             }
             else if (body.Equals("No"))
@@ -284,9 +304,9 @@ namespace CryptMessage
             }
             
         }
-        private async void MsgSendBtn_Click(object sender, RoutedEventArgs e)
+        public async void MsgSendBtn_Click(object sender, RoutedEventArgs e)
         {
-            string sen = UsernameDisplayLbl.Content.ToString(), 
+            string sen = theUser, 
                 rec = SendToTxt.Text, 
                 mes = MsgTxtBox.Text;
             Message msg = new Message(sen, rec, mes, DateTime.Now);
@@ -313,17 +333,97 @@ namespace CryptMessage
             timer1.Interval = 5000;
             timer1.Start();
         }
-        private async void getMsg(object sender, EventArgs e)
+
+        public async void getMsg(object sender, EventArgs e)
         {
-            //string userName = UsernameDisplayLbl.Content.ToString();
-            var res = await client.GetAsync(url + "messages");
-            string body = res.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(body);
-            if (body.Contains("\"recUsername\":\"admin\""))
+            usr userName = new usr(theUser);
+            string json = JsonConvert.SerializeObject(userName);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data1 = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var rec = await client.PostAsync(url + "recMessages", data);
+            var sent = await client.PostAsync(url + "sentMessages", data1);
+            string recBody = rec.Content.ReadAsStringAsync().Result;
+            string sentBody = sent.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(recBody);
+            Console.WriteLine(sentBody);
+            if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
             {
+                
                 Console.WriteLine("Message Recieved");
+                //join comma messages back together later
+                List<Message> recMsgList = new List<Message>();
+                #region string simplification
+                recBody = recBody.Replace("\"", "");
+                recBody =recBody.Replace("{recievedMessages:[", "");
+                recBody = recBody.Replace("],servMessage:undefinedrecieved}", "");
+                recBody = recBody.Replace(",__v:0}", "");
+                recBody = recBody.Replace("{_id:", "");
+                recBody = recBody.Replace("senUsername:", "");
+                recBody = recBody.Replace("recUsername:", "");
+                recBody = recBody.Replace("message:", "");
+                recBody = recBody.Replace("dateEntered:", "");
+                recBody = recBody.Replace(",", "§");
+                sentBody = sentBody.Replace("\"", "");
+                sentBody = sentBody.Replace("{recievedMessages:[", "");
+                sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
+                sentBody = sentBody.Replace(",__v:0}", "");
+                sentBody = sentBody.Replace("{_id:", "");
+                sentBody = sentBody.Replace("senUsername:", "");
+                sentBody = sentBody.Replace("recUsername:", "");
+                sentBody = sentBody.Replace("message:", "");
+                sentBody = sentBody.Replace("dateEntered:", "");
+                sentBody = sentBody.Replace(",", "§");
+                #endregion
+                Console.WriteLine(recBody);
+                List resMsg = new List();
+                var recSub = recBody.Split('§');
+                var sentSub = recBody.Split('§');
+                Console.WriteLine(recSub[0]);
+                for (int i = 0; i < recSub.Length + sentSub.Length; i++)
+                {
+                    //this.Dispatcher.Invoke(() =>
+                    //{
+                    Dispatcher.Invoke(new Action(() => {
+                        if (msg1Date.Content == null && sentSub.Length == 0)
+                        {
+                            user1Lbl.Content = recSub[1];
+                            msg1Lbl.Content = recSub[3];
+                            msg1Date.Content = recSub[4];
+                        }
+                        else if (msg1Date.Content == null && recSub.Length == 0)
+                        {
+                            user1Lbl.Content = sentSub[1];
+                            msg1Lbl.Content = sentSub[3];
+                            msg1Date.Content = sentSub[4];
+                        }
+                        else
+                        {
+                            if (DateTime.Parse(recSub[4]) < DateTime.Parse(msg1Date.Content.ToString()))
+                            {
+                                user3Lbl.Content = user2Lbl.Content;
+                                msg3Lbl.Content = msg2Lbl.Content;
+                                user2Lbl.Content = user1Lbl.Content;
+                                msg2Lbl.Content = msg1Lbl.Content;
+                                user1Lbl.Content = recSub[1];
+                                msg1Lbl.Content = recSub[3];
+                                msg1Date.Content = recSub[4];
+                            }
+                            else if (DateTime.Parse(sentSub[4]) < DateTime.Parse(msg1Date.Content.ToString()))
+                            {
+                                user3Lbl.Content = user2Lbl.Content;
+                                msg3Lbl.Content = msg2Lbl.Content;
+                                user2Lbl.Content = user1Lbl.Content;
+                                msg2Lbl.Content = msg1Lbl.Content;
+                                user1Lbl.Content = sentSub[1];
+                                msg1Lbl.Content = sentSub[3];
+                                msg1Date.Content = sentSub[4];
+                            }
+                        }
+                    }), DispatcherPriority.ContextIdle);
+                    //});
+                }
             }
-            
         }
     }
 }

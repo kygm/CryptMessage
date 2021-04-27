@@ -76,8 +76,7 @@
             <ListBoxItem Content="convo 6"/>
         </ListBox>
         <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
-        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden
-               " Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
+        <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.794,0.577" Grid.Row="9" Grid.Column="4" Height="23" Margin="0,-2,0,0" Grid.RowSpan="2"/>
         <TextBox x:Name="usernameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True"/>
         <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="4" Margin="0,-2,0,0"/>
@@ -87,6 +86,13 @@
         <TextBox x:Name="SendToTxt"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2" Grid.Row="17"/>
         <Label x:Name="LoginStatusLbl" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="6" VerticalAlignment="Top" Width="74" Margin="0,18,0,0" Grid.RowSpan="3"/>
         <Label x:Name="debugLbl" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="26" Margin="0,18,0,0" Grid.Row="4" Grid.RowSpan="3" VerticalAlignment="Top" Width="155" Grid.ColumnSpan="2"/>
+        <Label x:Name="user1Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Width="79" Height="26"/>
+        <Label x:Name="msg1Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="15" Grid.ColumnSpan="6" Width="476" Height="21"/>
+        <Label x:Name="user2Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="12" Margin="0,19,0,0" Grid.RowSpan="2" Width="79" Height="23"/>
+        <Label x:Name="msg2Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="12" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23"/>
+        <Label x:Name="user3Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="10" Margin="0,19,0,0" Grid.RowSpan="2" Width="79" Height="23"/>
+        <Label x:Name="msg3Lbl" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="10" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23"/>
+        <Label x:Name="msg1Date" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="8" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Height="26" Width="82" Grid.ColumnSpan="2" IsEnabled="False"/>
 
 
     </Grid>
