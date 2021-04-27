@@ -365,7 +365,7 @@ namespace CryptMessage
                 recBody = recBody.Replace("dateEntered:", "");
                 recBody = recBody.Replace(",", "§");
                 sentBody = sentBody.Replace("\"", "");
-                sentBody = sentBody.Replace("{recievedMessages:[", "");
+                sentBody = sentBody.Replace("{sentMessages:[", "");
                 sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
                 sentBody = sentBody.Replace(",__v:0}", "");
                 sentBody = sentBody.Replace("{_id:", "");
@@ -376,56 +376,54 @@ namespace CryptMessage
                 sentBody = sentBody.Replace(",", "§");
                 #endregion
                 Console.WriteLine(recBody);
-                List resMsg = new List();
+                Console.WriteLine(sentBody);
                 var recSub = recBody.Split('§');
                 var sentSub = recBody.Split('§');
                 Console.WriteLine(recSub[0]);
-                for (int i = 0; i < recSub.Length + sentSub.Length; i++)
-                {
+                //for (int i = 0; i < recSub.Length + sentSub.Length; i++)
+                //{
                     Dispatcher.Invoke(new Action(() => {
-                        if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
-                        {
-                            user1Lbl.Content = recSub[1];
-                            msg1Lbl.Content = recSub[3];
-                            msg1Date.Content = recSub[4];
-                        }
-                        else if (msg1Date.Content.ToString() == null||msg1Date.Content.ToString() == "" && recSub.Length == 0)
-                        {
-                            user1Lbl.Content = sentSub[1];
-                            msg1Lbl.Content = sentSub[3];
-                            msg1Date.Content = sentSub[4];
-                        }
-                        else if(msg1Date.Content != null && msg1Date.Content.ToString() != "")
+                        //if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
+                        //{
+                        //    user1Lbl.Content = recSub[1];
+                        //    msg1Lbl.Content = recSub[3];
+                        //    msg1Date.Content = recSub[4];
+                        //}
+                        //else if (msg1Date.Content.ToString() == null||msg1Date.Content.ToString() == "" && recSub.Length == 0)
+                        //{
+                        //    user1Lbl.Content = sentSub[1];
+                        //    msg1Lbl.Content = sentSub[3];
+                        //    msg1Date.Content = sentSub[4];
+                        //}
+                        //else
+                        if(msg1Date.Content != null && msg1Date.Content.ToString() != "")
                         {
                             if (DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
+                                Console.WriteLine("x");
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
                                 msg2Lbl.Content = msg1Lbl.Content;
-                                if(msg2Lbl.Content == msg1Lbl.Content)
-                                {
-                                    user1Lbl.Content = recSub[1];
-                                    msg1Lbl.Content = recSub[3];
-                                    msg1Date.Content = recSub[4];
-                                } 
+                                user1Lbl.Content = recSub[1];
+                                msg1Lbl.Content = recSub[3];
+                                msg1Date.Content = recSub[4];
+                                
                             }
-                            else if (DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
+                            if (DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
+                                Console.WriteLine("x");
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
                                 msg2Lbl.Content = msg1Lbl.Content;
-                                if (msg2Lbl.Content == msg1Lbl.Content)
-                                {
-                                    user1Lbl.Content = sentSub[1];
-                                    msg1Lbl.Content = sentSub[3];
-                                    msg1Date.Content = sentSub[4];
-                                }
+                                user1Lbl.Content = sentSub[1];
+                                msg1Lbl.Content = sentSub[3];
+                                msg1Date.Content = sentSub[4];
                             }
                         }  
                     }), DispatcherPriority.ContextIdle);
-                }
+                //}
             }
         }
     }
