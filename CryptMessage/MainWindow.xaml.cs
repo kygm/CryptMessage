@@ -319,6 +319,7 @@ namespace CryptMessage
             if (body.Contains("senUsername"))
             {
                 Console.WriteLine("Message Sent");
+                MsgTxtBox.Text = "";
             }
             else 
             {
