@@ -382,46 +382,49 @@ namespace CryptMessage
                 Console.WriteLine(recSub[0]);
                 for (int i = 0; i < recSub.Length + sentSub.Length; i++)
                 {
-                    //this.Dispatcher.Invoke(() =>
-                    //{
                     Dispatcher.Invoke(new Action(() => {
-                        if (msg1Date.Content == null && sentSub.Length == 0)
+                        if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
                         {
                             user1Lbl.Content = recSub[1];
                             msg1Lbl.Content = recSub[3];
                             msg1Date.Content = recSub[4];
                         }
-                        else if (msg1Date.Content == null && recSub.Length == 0)
+                        else if (msg1Date.Content.ToString() == null||msg1Date.Content.ToString() == "" && recSub.Length == 0)
                         {
                             user1Lbl.Content = sentSub[1];
                             msg1Lbl.Content = sentSub[3];
                             msg1Date.Content = sentSub[4];
                         }
-                        else
+                        else if(msg1Date.Content != null && msg1Date.Content.ToString() != "")
                         {
-                            if (DateTime.Parse(recSub[4]) < DateTime.Parse(msg1Date.Content.ToString()))
+                            if (DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
                                 msg2Lbl.Content = msg1Lbl.Content;
-                                user1Lbl.Content = recSub[1];
-                                msg1Lbl.Content = recSub[3];
-                                msg1Date.Content = recSub[4];
+                                if(msg2Lbl.Content == msg1Lbl.Content)
+                                {
+                                    user1Lbl.Content = recSub[1];
+                                    msg1Lbl.Content = recSub[3];
+                                    msg1Date.Content = recSub[4];
+                                } 
                             }
-                            else if (DateTime.Parse(sentSub[4]) < DateTime.Parse(msg1Date.Content.ToString()))
+                            else if (DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
                                 msg2Lbl.Content = msg1Lbl.Content;
-                                user1Lbl.Content = sentSub[1];
-                                msg1Lbl.Content = sentSub[3];
-                                msg1Date.Content = sentSub[4];
+                                if (msg2Lbl.Content == msg1Lbl.Content)
+                                {
+                                    user1Lbl.Content = sentSub[1];
+                                    msg1Lbl.Content = sentSub[3];
+                                    msg1Date.Content = sentSub[4];
+                                }
                             }
-                        }
+                        }  
                     }), DispatcherPriority.ContextIdle);
-                    //});
                 }
             }
         }
