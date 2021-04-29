@@ -72,3 +72,11 @@ C:\Users\ricke\Desktop\KYGM Services\CryptMessage\CryptMessage\obj\Debug\CryptMe
 C:\Users\ricke\Desktop\KYGM Services\CryptMessage\CryptMessage\obj\Debug\CryptMessage.csproj.CopyComplete
 C:\Users\ricke\Desktop\KYGM Services\CryptMessage\CryptMessage\obj\Debug\CryptMessage.exe
 C:\Users\ricke\Desktop\KYGM Services\CryptMessage\CryptMessage\obj\Debug\CryptMessage.pdb
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Collections.Immutable.dll
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Memory.dll
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Reflection.Metadata.dll
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Collections.Immutable.xml
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Memory.xml
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\16dra\Desktop\QuietMsg\CryptMessage\CryptMessage\bin\Debug\System.Reflection.Metadata.xml

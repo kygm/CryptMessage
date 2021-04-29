@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,7 +67,41 @@ namespace CryptMessage
             return "From: "+senUsername+"\n To: "+recUsername+"\n Message: "+message;
         }
     }
+    class recMsg
+    {
+        public string _id, senUsername, recUsername, message;
+        public DateTime dateEntered;
+        public recMsg(string id,string sender, string reciever, string mess, DateTime entered)
+        {
+            _id = id;
+            senUsername = sender;
+            recUsername = reciever;
+            message = mess;
+            dateEntered = entered;
+        }
+    }
+    class senMsg
+    {
+        string msgId, senUsername, recUsername, message;
+        DateTime dateEntered;
+        public senMsg(string id, string sender, string reciever, string mess, DateTime entered)
+        {
+            msgId = id;
+            senUsername = sender;
+            recUsername = reciever;
+            message = mess;
+            dateEntered = entered;
+        }
+    }
 
+    class recievedMessagees
+    {
+        public List<recMsg> recieved = new List<recMsg>(); 
+        public recievedMessagees(List<recMsg> rec)
+        {
+            recieved = rec;
+        }
+    }
     public partial class MainWindow : Window
     {
         static readonly HttpClient client = new HttpClient();
@@ -92,9 +127,10 @@ namespace CryptMessage
         private void updatePages(String page)
         {
             bool menuVis;
-            if (page == "login")
+            if (page == "login"||page=="newUser")
             {
                 menuVis = false;
+                AboutMnu.Visibility = Visibility.Hidden;
             }
             else { menuVis = true; }
             SettingsMnu.IsEnabled = menuVis;
@@ -106,6 +142,7 @@ namespace CryptMessage
             convoManageVis(page);
             settingsVis(page);
             loginVis(page);
+            newUserVis(page);
         }
         private void homeVis(String page)
             {//set the visibilty for each page in its own function, run if statement on the page name, adjust visibility accordingly.
@@ -189,7 +226,25 @@ namespace CryptMessage
                 LoginBtn.Visibility = visState;
                 debugLbl.Visibility = visState;
                 LoginStatusLbl.Visibility = visState;
+                NewUserBtn.Visibility = visState;
             }
+        private void newUserVis(string page)
+        {
+            System.Windows.Visibility visState;
+            if (page == "newUser")
+            {
+                visState = visible;
+            }
+            else { visState = invisible; }
+            CreateUserBtn.Visibility = visState;
+            newUsernameLbl.Visibility = visState;
+            newUsernameTxtBox.Visibility = visState;
+            newPasswordLbl.Visibility = visState;
+            newPassBox.Visibility = visState;
+            repeatNewPasswordLbl.Visibility = visState;
+            repeatNewPassBox.Visibility = visState;
+        }
+
         #endregion
 
         #region Window Privacy Functions
@@ -254,6 +309,11 @@ namespace CryptMessage
         private void AboutMnu_Click(object sender, RoutedEventArgs e)
         {
             page = "about";
+            updatePages(page);
+        }
+        private void NewUserBtn_Click(object sender, RoutedEventArgs e)
+        {
+            page = "newUser";
             updatePages(page);
         }
         private async void LoginBtn_Click(object sender, RoutedEventArgs e)
@@ -331,6 +391,7 @@ namespace CryptMessage
         {
             timer1 = new Timer();
             timer1.Elapsed+= new ElapsedEventHandler(getMsg);
+            timer1.Elapsed+= new ElapsedEventHandler(getFriends);
             timer1.Interval = 5000;
             timer1.Start();
         }
@@ -344,13 +405,13 @@ namespace CryptMessage
 
             var rec = await client.PostAsync(url + "recMessages", data);
             var sent = await client.PostAsync(url + "sentMessages", data1);
+            
             string recBody = rec.Content.ReadAsStringAsync().Result;
             string sentBody = sent.Content.ReadAsStringAsync().Result;
             Console.WriteLine(recBody);
             Console.WriteLine(sentBody);
             if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
-            {
-                
+            {  
                 Console.WriteLine("Message Recieved");
                 //join comma messages back together later
                 List<Message> recMsgList = new List<Message>();
@@ -379,29 +440,28 @@ namespace CryptMessage
                 Console.WriteLine(recBody);
                 Console.WriteLine(sentBody);
                 var recSub = recBody.Split('§');
-                var sentSub = recBody.Split('§');
+                var sentSub = sentBody.Split('§');
                 Console.WriteLine(recSub[0]);
-                //for (int i = 0; i < recSub.Length + sentSub.Length; i++)
+                //for (int i = 0; i < recSub.Length + sentSub.Length; i++) 
                 //{
                     Dispatcher.Invoke(new Action(() => {
-                        //if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
-                        //{
-                        //    user1Lbl.Content = recSub[1];
-                        //    msg1Lbl.Content = recSub[3];
-                        //    msg1Date.Content = recSub[4];
-                        //}
-                        //else if (msg1Date.Content.ToString() == null||msg1Date.Content.ToString() == "" && recSub.Length == 0)
-                        //{
-                        //    user1Lbl.Content = sentSub[1];
-                        //    msg1Lbl.Content = sentSub[3];
-                        //    msg1Date.Content = sentSub[4];
-                        //}
-                        //else
-                        if(msg1Date.Content != null && msg1Date.Content.ToString() != "")
+                        if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
+                        {
+                            user1Lbl.Content = recSub[1];
+                            msg1Lbl.Content = recSub[3];
+                            msg1Date.Content = recSub[4];
+                        }
+                        else if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && recSub.Length == 0)
+                        {
+                            user1Lbl.Content = sentSub[1];
+                            msg1Lbl.Content = sentSub[3];
+                            msg1Date.Content = sentSub[4];
+                        }
+                        else
+                        if (msg1Date.Content != null && msg1Date.Content.ToString() != "")
                         {
                             if (DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
-                                Console.WriteLine("x");
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
@@ -413,7 +473,6 @@ namespace CryptMessage
                             }
                             if (DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
                             {
-                                Console.WriteLine("x");
                                 user3Lbl.Content = user2Lbl.Content;
                                 msg3Lbl.Content = msg2Lbl.Content;
                                 user2Lbl.Content = user1Lbl.Content;
@@ -427,5 +486,43 @@ namespace CryptMessage
                 //}
             }
         }
+        public async void getFriends(object sender,EventArgs e)
+        {
+            usr userName = new usr(theUser);
+            string json = JsonConvert.SerializeObject(userName);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var rec = await client.PostAsync(url + "getFriends", data);
+            var res = rec.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(res);
+            if (res.Contains(theUser))
+            {
+                res = res.Replace("\"", "");
+                res = res.Replace("_id:", "");
+                res = res.Replace("accepted:", "");
+                res = res.Replace("firstUsername:", "");
+                res = res.Replace("secondUsername:", "");
+                res = res.Replace("dateEntered:", "");
+                var friendList = res.Split(',');
+                Console.WriteLine(res);
+                int numFriends = friendList.Length / 6;
+                Console.WriteLine(numFriends);
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    ConvoList.Items.Clear();
+                }));
+                for (int i = 3; i < friendList.Length-1; i+=6)
+                {
+                    if (friendList[i - 2] == "true")
+                    {
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            ConvoList.Items.Add(friendList[i]);
+                        }));
+                    }
+                }
+            }
+        }
+
+        
     }
 }

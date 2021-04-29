@@ -60,20 +60,16 @@
         <Label x:Name="UsernameDisplayLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,-3,0,0"/>
         <TextBox x:Name="MsgTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Message" VerticalAlignment="Top" Width="527" Visibility="Visible" Grid.Row="18" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="8" TabIndex="5" Background="#FFC81210"/>
         <Button x:Name="MsgSendBtn" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Visibility="Visible" Grid.Row="18" Grid.Column="10" Grid.RowSpan="2" Click="MsgSendBtn_Click" TabIndex="6" Background="#FFA06060"/>
-        <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" VerticalAlignment="Top" Visibility="Visible" Grid.Row="1" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,0" HorizontalAlignment="Left" Width="128"/>
-        <Button x:Name="NewConvoCreateBtn" Content="Create Converstation" Visibility="Visible" IsEnabled="False" Grid.Row="2" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,1" HorizontalAlignment="Left" Width="128"/>
-        <Button x:Name="DelConvoBtn" Content="Delete Conversation" VerticalAlignment="Top" Visibility="Visible" IsEnabled="False" Grid.Row="3" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,0" HorizontalAlignment="Left" Width="128"/>
+        <Button x:Name="AddConvoBtn" Content="New Conversation" Click="newConvoVis" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="1" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,0" HorizontalAlignment="Left" Width="128"/>
+        <Button x:Name="NewConvoCreateBtn" Content="Create Converstation" Visibility="Hidden" IsEnabled="False" Grid.Row="2" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,1" HorizontalAlignment="Left" Width="128"/>
+        <Button x:Name="DelConvoBtn" Content="Delete Conversation" VerticalAlignment="Top" Visibility="Hidden" IsEnabled="False" Grid.Row="3" Grid.Column="9" Background="#FFA06060" Margin="0,0,-49,0" HorizontalAlignment="Left" Width="128"/>
         <Label x:Name="NewConvoTitleLbl" Content="Title" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="-5.442,0.78" Grid.Row="5" Grid.Column="3"/>
         <TextBox x:Name="NewConvoTitleTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Visibility="Hidden" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2"/>
         <Label x:Name="NewRecipientLbl" Content="Recipient/s" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="6" Grid.Column="3"/>
         <TextBox x:Name="NewRecipientTxtBox" HorizontalAlignment="Left" Height="36" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Visibility="Hidden" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="19" Height="126" Background="#FF700C0C">
-            <ListBoxItem Content="convo 1"/>
-            <ListBoxItem Content="convo 2"/>
-            <ListBoxItem Content="convo 3"/>
-            <ListBoxItem Content="convo 4"/>
-            <ListBoxItem Content="convo 5"/>
-            <ListBoxItem Content="convo 6"/>
+        <Label x:Name="listLbl" Content="Friends:" Margin="0,18,5,0" Grid.RowSpan="2"/>
+        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="15" Height="314" Background="#FF700C0C" Width="79">
+
         </ListBox>
         <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
@@ -81,18 +77,26 @@
         <TextBox x:Name="usernameTxtBox" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True" TabIndex="1" Background="#FFC81212" Grid.ColumnSpan="2" Margin="0,0,39,0"/>
         <Label x:Name="loginPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="4" Margin="0,-2,0,0"/>
         <PasswordBox x:Name="loginPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="10" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,39,0" TabIndex="2" Background="#FFC81211"/>
-        <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="238" Click="LoginBtn_Click" TabIndex="3" Background="#FFA06060"/>
+        <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="239" Click="LoginBtn_Click" TabIndex="3" Background="#FFA06060"/>
+        <Button x:Name="NewUserBtn" Content="Create New User" Grid.ColumnSpan="4" Grid.Column="3" Margin="78,19,0,0" Grid.Row="12" Grid.RowSpan="2" Background="#FFA06060" Click="NewUserBtn_Click"/>
         <Label x:Name="SendToLbl"  Content="Send To:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="16" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,0,0" RenderTransformOrigin="0.709,0.115" Width="79"/>
         <TextBox x:Name="SendToTxt"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="21" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2" Grid.Row="16" AllowDrop="False" TabIndex="4" Background="#FFC81208" Margin="0,16,0,0" Grid.RowSpan="2"/>
         <Label x:Name="LoginStatusLbl" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="6" VerticalAlignment="Top" Width="74" Margin="0,18,0,0" Grid.RowSpan="3"/>
         <Label x:Name="debugLbl" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="26" Margin="0,18,0,0" Grid.Row="4" Grid.RowSpan="3" VerticalAlignment="Top" Width="155" Grid.ColumnSpan="2"/>
         <Label x:Name="user1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Width="79" Height="26"/>
-        <Label x:Name="msg1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="14" Grid.ColumnSpan="6" Width="476" Height="26" Margin="0,16,0,0" Grid.RowSpan="2"/>
+        <Label x:Name="msg1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="14" Grid.ColumnSpan="6" Width="476" Height="26" Margin="0,16,0,0" Grid.RowSpan="2" Visibility="Hidden"/>
         <Label x:Name="user2Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="12" Margin="0,19,0,0" Grid.RowSpan="2" Width="79" Height="23"/>
-        <Label x:Name="msg2Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="12" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23"/>
+        <Label x:Name="msg2Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="12" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23" Visibility="Hidden"/>
         <Label x:Name="user3Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="10" Margin="0,19,0,0" Grid.RowSpan="2" Width="79" Height="23"/>
-        <Label x:Name="msg3Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="10" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23"/>
+        <Label x:Name="msg3Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Margin="0,19,0,0" Grid.Row="10" Grid.RowSpan="2" Grid.ColumnSpan="6" Width="476" Height="23" Visibility="Hidden"/>
         <Label x:Name="msg1Date" Content="2021-04-26T03:44:56.984Z" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="8" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Height="26" Width="82" Grid.ColumnSpan="2" Opacity="0"/>
+        <Button x:Name="CreateUserBtn" Content="Create User" HorizontalAlignment="Left" VerticalAlignment="Top" Width="239" Grid.Column="4" Grid.Row="12" Height="21" Grid.ColumnSpan="3" Background="#FFA06060" Visibility="Hidden"/>
+        <Label x:Name="newUsernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.794,0.577" Grid.Row="8" Grid.Column="4" Height="23" Margin="0,19,0,0" Grid.RowSpan="3" Visibility="Hidden"/>
+        <TextBox x:Name="newUsernameTxtBox" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="1.233,2.957" Grid.Row="9" Grid.RowSpan="2" Grid.Column="5" Grid.IsSharedSizeScope="True" TabIndex="1" Background="#FFC81212" Grid.ColumnSpan="2" Margin="0,0,39,0" Visibility="Hidden"/>
+        <Label x:Name="newPasswordLbl" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="9" Grid.Column="4" Margin="0,18,0,0" Grid.RowSpan="2" Visibility="Hidden"/>
+        <PasswordBox x:Name="newPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="10" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,39,0" TabIndex="2" Background="#FFC81211" Visibility="Hidden"/>
+        <Label x:Name="repeatNewPasswordLbl" Content="Repeat Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="3" Margin="40,18,0,0" Grid.RowSpan="3" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <PasswordBox x:Name="repeatNewPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="11" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,39,0" TabIndex="2" Background="#FFC81211" Visibility="Hidden"/>
 
 
     </Grid>
