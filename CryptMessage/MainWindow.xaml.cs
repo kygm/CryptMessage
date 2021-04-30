@@ -132,7 +132,7 @@ namespace CryptMessage
                 menuVis = false;
                 AboutMnu.Visibility = Visibility.Hidden;
             }
-            else { menuVis = true; }
+            else { menuVis = true; AboutMnu.Visibility = Visibility.Visible; }
             SettingsMnu.IsEnabled = menuVis;
             HomeMnu.IsEnabled = menuVis;
             ConversationsMnu.IsEnabled = menuVis;
@@ -348,6 +348,7 @@ namespace CryptMessage
                 curUser.username = usernameTxtBox.Text;
                 theUser = curUser.username;
                 UsernameDisplayLbl.Content=theUser;
+                getFriends();
                 checkMsg();
             }
             else if (body.Equals("No"))
@@ -391,7 +392,6 @@ namespace CryptMessage
         {
             timer1 = new Timer();
             timer1.Elapsed+= new ElapsedEventHandler(getMsg);
-            timer1.Elapsed+= new ElapsedEventHandler(getFriends);
             timer1.Interval = 5000;
             timer1.Start();
         }
@@ -416,77 +416,94 @@ namespace CryptMessage
                 //join comma messages back together later
                 List<Message> recMsgList = new List<Message>();
                 #region string simplification
-                recBody = recBody.Replace("\"", "");
-                recBody =recBody.Replace("{recievedMessages:[", "");
+                recBody =recBody.Replace("{\"recievedMessages\":[", "");
                 recBody = recBody.Replace("],servMessage:undefinedrecieved}", "");
-                recBody = recBody.Replace(",__v:0}", "");
-                recBody = recBody.Replace("{_id:", "");
-                recBody = recBody.Replace("senUsername:", "");
-                recBody = recBody.Replace("recUsername:", "");
-                recBody = recBody.Replace("message:", "");
-                recBody = recBody.Replace("dateEntered:", "");
-                recBody = recBody.Replace(",", "§");
-                sentBody = sentBody.Replace("\"", "");
-                sentBody = sentBody.Replace("{sentMessages:[", "");
+                recBody = recBody.Replace("{\"_id\":", "");
+                recBody = recBody.Replace("\"senUsername\":", "");
+                recBody = recBody.Replace("\"recUsername\":", "");
+                recBody = recBody.Replace("\"message\":", "");
+                recBody = recBody.Replace("\"dateEntered\":", "");
+                recBody = recBody.Replace("__v\":0},\"", "");
+                recBody = recBody.Replace("\",\"", "§");
+
+                sentBody = sentBody.Replace("{\"sentMessages\":[", "");
                 sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
-                sentBody = sentBody.Replace(",__v:0}", "");
-                sentBody = sentBody.Replace("{_id:", "");
-                sentBody = sentBody.Replace("senUsername:", "");
-                sentBody = sentBody.Replace("recUsername:", "");
-                sentBody = sentBody.Replace("message:", "");
-                sentBody = sentBody.Replace("dateEntered:", "");
-                sentBody = sentBody.Replace(",", "§");
+                sentBody = sentBody.Replace("{\"_id\":", "");
+                sentBody = sentBody.Replace("\"senUsername\":", "");
+                sentBody = sentBody.Replace("\"recUsername\":", "");
+                sentBody = sentBody.Replace("\"message\":", "");
+                sentBody = sentBody.Replace("\"dateEntered\":", "");
+                sentBody = sentBody.Replace("__v\":0},\"", "");
+                sentBody = sentBody.Replace("\",\"", "§");
                 #endregion
                 Console.WriteLine(recBody);
                 Console.WriteLine(sentBody);
                 var recSub = recBody.Split('§');
                 var sentSub = sentBody.Split('§');
                 Console.WriteLine(recSub[0]);
-                //for (int i = 0; i < recSub.Length + sentSub.Length; i++) 
-                //{
+                //Console.WriteLine(convoSelect());
                     Dispatcher.Invoke(new Action(() => {
-                        if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
-                        {
-                            user1Lbl.Content = recSub[1];
-                            msg1Lbl.Content = recSub[3];
-                            msg1Date.Content = recSub[4];
-                        }
-                        else if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && recSub.Length == 0)
-                        {
-                            user1Lbl.Content = sentSub[1];
-                            msg1Lbl.Content = sentSub[3];
-                            msg1Date.Content = sentSub[4];
-                        }
-                        else
+                        //if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
+                        //{
+                        //    for (int i = 0; i < recSub.Length; i += 5)
+                        //    {
+                        //        if (recSub[i + 1] == convoSelect())
+                        //        {
+                        //            user1Lbl.Content = recSub[i + 1];
+                        //            msg1Lbl.Content = recSub[i + 3];
+                        //            msg1Date.Content = recSub[i + 4];
+                        //        }
+                        //    }
+                        //}
+                        //else if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && recSub.Length == 0)
+                        //{
+                        //    while()
+                        //    for (int i = 0; i < recSub.Length; i += 5)
+                        //    {
+                        //        if (sentSub[i + 1] == convoSelect())
+                        //        {
+                        //            user1Lbl.Content = sentSub[i + 1];
+                        //            msg1Lbl.Content = sentSub[i + 3];
+                        //            msg1Date.Content = sentSub[i + 4];
+                        //        }
+                        //    }
+                        //}
+                        //else
                         if (msg1Date.Content != null && msg1Date.Content.ToString() != "")
                         {
-                            if (DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-                            {
-                                user3Lbl.Content = user2Lbl.Content;
-                                msg3Lbl.Content = msg2Lbl.Content;
-                                user2Lbl.Content = user1Lbl.Content;
-                                msg2Lbl.Content = msg1Lbl.Content;
-                                user1Lbl.Content = recSub[1];
-                                msg1Lbl.Content = recSub[3];
-                                msg1Date.Content = recSub[4];
-                                
-                            }
-                            if (DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-                            {
-                                user3Lbl.Content = user2Lbl.Content;
-                                msg3Lbl.Content = msg2Lbl.Content;
-                                user2Lbl.Content = user1Lbl.Content;
-                                msg2Lbl.Content = msg1Lbl.Content;
-                                user1Lbl.Content = sentSub[1];
-                                msg1Lbl.Content = sentSub[3];
-                                msg1Date.Content = sentSub[4];
-                            }
+                            //for (int i = 0; i < recSub.Length; i += 5)
+                            //{
+                                if (recSub[1]==ConvoList.SelectedItem.ToString()&& DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
+                                {
+                                Console.WriteLine(ConvoList.SelectedItem.ToString());
+                                    user3Lbl.Content = user2Lbl.Content;
+                                    msg3Lbl.Content = msg2Lbl.Content;
+                                    user2Lbl.Content = user1Lbl.Content;
+                                    msg2Lbl.Content = msg1Lbl.Content;
+                                    user1Lbl.Content = recSub[1];
+                                    msg1Lbl.Content = recSub[3];
+                                    msg1Date.Content = recSub[4];
+                                }
+                            //}
+                            //for (int i = 0; i < recSub.Length; i += 5)
+                            //{
+                                if (sentSub[2] == ConvoList.SelectedItem.ToString() && DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
+                                {
+                                    user3Lbl.Content = user2Lbl.Content;
+                                    msg3Lbl.Content = msg2Lbl.Content;
+                                    user2Lbl.Content = user1Lbl.Content;
+                                    msg2Lbl.Content = msg1Lbl.Content;
+                                    user1Lbl.Content = sentSub[1];
+                                    msg1Lbl.Content = sentSub[3];
+                                    msg1Date.Content = sentSub[4];
+                                }
+                            //}
                         }  
                     }), DispatcherPriority.ContextIdle);
                 //}
             }
         }
-        public async void getFriends(object sender,EventArgs e)
+        public async void getFriends()
         {
             usr userName = new usr(theUser);
             string json = JsonConvert.SerializeObject(userName);
@@ -510,7 +527,7 @@ namespace CryptMessage
                 {
                     ConvoList.Items.Clear();
                 }));
-                for (int i = 3; i < friendList.Length-1; i+=6)
+                for (int i = 3; i < friendList.Length; i+=6)
                 {
                     if (friendList[i - 2] == "true")
                     {
@@ -522,7 +539,5 @@ namespace CryptMessage
                 }
             }
         }
-
-        
     }
 }
