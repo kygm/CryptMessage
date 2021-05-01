@@ -68,7 +68,7 @@
         <Label x:Name="NewRecipientLbl" Content="Recipient/s" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="6" Grid.Column="3"/>
         <TextBox x:Name="NewRecipientTxtBox" HorizontalAlignment="Left" Height="36" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Visibility="Hidden" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2"/>
         <Label x:Name="listLbl" Content="Friends:" Margin="0,18,5,0" Grid.RowSpan="2"/>
-        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="15" Height="314" Background="#FF700C0C" Width="79"></ListBox>
+        <ListBox x:Name="ConvoList" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="15" Height="314" Background="#FF700C0C" Width="79"> </ListBox>
         <Label x:Name="senderName" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="1" Grid.Row="15" Margin="12,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="sendersMessage" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.553,1.962" Width="57" Visibility="Hidden" Grid.Column="3" Grid.Row="15" Margin="10,19,0,0" Grid.RowSpan="2"/>
         <Label x:Name="usernameLbl" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.794,0.577" Grid.Row="9" Grid.Column="4" Height="23" Margin="0,-2,0,0" Grid.RowSpan="2"/>
