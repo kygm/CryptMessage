@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
 using Newtonsoft.Json;
+using System.Dynamic;
 
 namespace CryptMessage
 {
@@ -67,11 +68,11 @@ namespace CryptMessage
             return "From: "+senUsername+"\n To: "+recUsername+"\n Message: "+message;
         }
     }
-    class recMsg
+    class RecMsg
     {
         public string _id, senUsername, recUsername, message;
         public DateTime dateEntered;
-        public recMsg(string id,string sender, string reciever, string mess, DateTime entered)
+        public RecMsg(string id,string sender, string reciever, string mess, DateTime entered)
         {
             _id = id;
             senUsername = sender;
@@ -80,11 +81,11 @@ namespace CryptMessage
             dateEntered = entered;
         }
     }
-    class senMsg
+    class SenMsg
     {
         string msgId, senUsername, recUsername, message;
         DateTime dateEntered;
-        public senMsg(string id, string sender, string reciever, string mess, DateTime entered)
+        public SenMsg(string id, string sender, string reciever, string mess, DateTime entered)
         {
             msgId = id;
             senUsername = sender;
@@ -96,8 +97,8 @@ namespace CryptMessage
 
     class recievedMessagees
     {
-        public List<recMsg> recieved = new List<recMsg>(); 
-        public recievedMessagees(List<recMsg> rec)
+        public List<RecMsg> recieved = new List<RecMsg>(); 
+        public recievedMessagees(List<RecMsg> rec)
         {
             recieved = rec;
         }
@@ -393,7 +394,7 @@ namespace CryptMessage
         {
             timer1 = new Timer();
             timer1.Elapsed+= new ElapsedEventHandler(getMsg);
-            timer1.Interval = 5000;
+            timer1.Interval = 100;
             timer1.Start();
         }
 
@@ -409,6 +410,18 @@ namespace CryptMessage
             
             string recBody = rec.Content.ReadAsStringAsync().Result;
             string sentBody = sent.Content.ReadAsStringAsync().Result;
+
+            var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
+            dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(recBody, expConverter);
+
+            var recJson = JsonConvert.SerializeObject(obj.recievedMessages);
+
+            var recMsg = JsonConvert.DeserializeObject<List<RecMsg>>(recJson);
+            foreach(RecMsg rsm in recMsg)
+            {
+                Console.WriteLine(rsm.message);
+            }
+
             Console.WriteLine(recBody);
             Console.WriteLine(sentBody);
             if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
