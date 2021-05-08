@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using System.Xml;
 using Newtonsoft.Json;
 using System.Dynamic;
+using System.Globalization;
 
 namespace CryptMessage
 {
@@ -28,7 +29,17 @@ namespace CryptMessage
     /// </summary>
     /// thinking of using the dragEnter and Drop properties to prevent screenshots, more info later
     /// may also use lostFocus
-
+    public class NameRule : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            return value is string str && str.All(ch =>
+            ch < 155 || (ch > 159 && ch < 166) || (ch > 180 && ch < 185) || (ch > 197 && ch < 200) ||
+            (ch > 208 && ch < 217) || ch == 222 || (ch > 223 && ch < 240))
+                ? ValidationResult.ValidResult
+                : new ValidationResult(false, "The name contains illegal characters");
+        }
+    }
     class User
     {
         public string username;
@@ -83,8 +94,8 @@ namespace CryptMessage
     }
     class SenMsg
     {
-        string msgId, senUsername, recUsername, message;
-        DateTime dateEntered;
+        public string msgId, senUsername, recUsername, message;
+        public DateTime dateEntered;
         public SenMsg(string id, string sender, string reciever, string mess, DateTime entered)
         {
             msgId = id;
@@ -94,7 +105,16 @@ namespace CryptMessage
             dateEntered = entered;
         }
     }
-
+    class newUser
+    {
+        public string username, email, password;
+        public newUser(string u,string e,string p)
+        {
+            username = u;
+            email = e;
+            password = p;
+        }
+    }
     class recievedMessagees
     {
         public List<RecMsg> recieved = new List<RecMsg>(); 
@@ -103,8 +123,13 @@ namespace CryptMessage
             recieved = rec;
         }
     }
+    class Conversation
+    {
+        public List<Message> convo = new List<Message>();
+    }
     public partial class MainWindow : Window
     {
+        
         static readonly HttpClient client = new HttpClient();
         Uri server = new Uri("https://crypt-message.herokuapp.com/");
         private const string url = "https://crypt-message.herokuapp.com/";
@@ -114,7 +139,8 @@ namespace CryptMessage
         System.Windows.Visibility invisible = Visibility.Hidden;
         User curUser = new User(null,null);
         string theUser;
-
+        int ticks = 0;
+        Timer timer2 = new Timer();
         public MainWindow()
         {
             client.BaseAddress = server;
@@ -134,6 +160,12 @@ namespace CryptMessage
                 AboutMnu.Visibility = Visibility.Hidden;
             }
             else { menuVis = true; AboutMnu.Visibility = Visibility.Visible; }
+            if (page == "newUser")
+            {
+                timer2.Elapsed += new ElapsedEventHandler(setCreateUserBtn);
+                timer2.Interval = 100;
+                timer2.Start();
+            }
             SettingsMnu.IsEnabled = menuVis;
             HomeMnu.IsEnabled = menuVis;
             ConversationsMnu.IsEnabled = menuVis;
@@ -142,7 +174,7 @@ namespace CryptMessage
             aboutVis(page);
             convoManageVis(page);
             settingsVis(page);
-            loginVis(page);
+            loginVis(page); 
             newUserVis(page);
         }
         private void homeVis(String page)
@@ -165,6 +197,7 @@ namespace CryptMessage
             msg1Lbl.Visibility = visState;
             msg2Lbl.Visibility = visState;
             msg3Lbl.Visibility = visState;
+            listLbl.Visibility = visState;
             }
             private void aboutVis(String page)
             {
@@ -237,13 +270,15 @@ namespace CryptMessage
                 visState = visible;
             }
             else { visState = invisible; }
-            CreateUserBtn.Visibility = visState;
             newUsernameLbl.Visibility = visState;
             newUsernameTxtBox.Visibility = visState;
             newPasswordLbl.Visibility = visState;
             newPassBox.Visibility = visState;
             repeatNewPasswordLbl.Visibility = visState;
             repeatNewPassBox.Visibility = visState;
+            createUserMessageLbl.Visibility = visState;
+            newEmailLbl.Visibility = visState;
+            newEmailTxtBox.Visibility = visState;
         }
 
         #endregion
@@ -397,7 +432,21 @@ namespace CryptMessage
             timer1.Interval = 100;
             timer1.Start();
         }
-
+        public void setCreateUserBtn(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (newUsernameTxtBox.Text == "" || newEmailTxtBox.Text == "" ||
+                newPassBox.Password == "" || repeatNewPassBox.Password == ""||
+                repeatNewPassBox.Password != newPassBox.Password)
+                {
+                    CreateUserBtn.Visibility = invisible;
+                }
+                else if(newUsernameTxtBox.Text != "" && newEmailTxtBox.Text != "" &&
+                newPassBox.Password != "" && repeatNewPassBox.Password != "") 
+                { CreateUserBtn.Visibility = visible; }
+            }));
+        }
         public async void getMsg(object sender, EventArgs e)
         {
             usr userName = new usr(theUser);
@@ -413,113 +462,123 @@ namespace CryptMessage
 
             var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
             dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(recBody, expConverter);
+            dynamic obj1 = JsonConvert.DeserializeObject<ExpandoObject>(sentBody, expConverter);
 
             var recJson = JsonConvert.SerializeObject(obj.recievedMessages);
+            var senJson = JsonConvert.SerializeObject(obj.sentMessages);
 
             var recMsg = JsonConvert.DeserializeObject<List<RecMsg>>(recJson);
+            var senMsg = JsonConvert.DeserializeObject<List<SenMsg>>(senJson);
             foreach(RecMsg rsm in recMsg)
             {
                 Console.WriteLine(rsm.message);
             }
-
             Console.WriteLine(recBody);
             Console.WriteLine(sentBody);
-            if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
-            {  
-                Console.WriteLine("Message Recieved");
-                //join comma messages back together later
-                List<Message> recMsgList = new List<Message>();
-                #region string simplification
-                recBody =recBody.Replace("{\"recievedMessages\":[", "");
-                recBody = recBody.Replace("],servMessage:undefinedrecieved}", "");
-                recBody = recBody.Replace("{\"_id\":", "");
-                recBody = recBody.Replace("\"senUsername\":", "");
-                recBody = recBody.Replace("\"recUsername\":", "");
-                recBody = recBody.Replace("\"message\":", "");
-                recBody = recBody.Replace("\"dateEntered\":", "");
-                recBody = recBody.Replace("__v\":0},\"", "");
-                recBody = recBody.Replace("\",\"", "§");
-
-                sentBody = sentBody.Replace("{\"sentMessages\":[", "");
-                sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
-                sentBody = sentBody.Replace("{\"_id\":", "");
-                sentBody = sentBody.Replace("\"senUsername\":", "");
-                sentBody = sentBody.Replace("\"recUsername\":", "");
-                sentBody = sentBody.Replace("\"message\":", "");
-                sentBody = sentBody.Replace("\"dateEntered\":", "");
-                sentBody = sentBody.Replace("__v\":0},\"", "");
-                sentBody = sentBody.Replace("\",\"", "§");
-                #endregion
-                Console.WriteLine(recBody);
-                Console.WriteLine(sentBody);
-                var recSub = recBody.Split('§');
-                var sentSub = sentBody.Split('§');
-                Console.WriteLine(recSub[0]);
-                //Console.WriteLine(convoSelect());
-                    Dispatcher.Invoke(new Action(() => {
-                        if (ConvoList.SelectedItem.ToString() != " ")
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (ConvoList.SelectedItem.ToString() != " ")
+                {
+                    foreach (RecMsg r in recMsg)
+                    {
+                        if ((r.recUsername == theUser && r.senUsername == ConvoList.SelectedItem.ToString()) &&
+                                r.dateEntered > Convert.ToDateTime(msg1Date.Content.ToString()))
                         {
-                            //if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && sentSub.Length == 0)
-                            //{
-                            //    for (int i = 0; i < recSub.Length; i += 5)
-                            //    {
-                            //        if (recSub[i + 1] == convoSelect())
-                            //        {
-                            //            user1Lbl.Content = recSub[i + 1];
-                            //            msg1Lbl.Content = recSub[i + 3];
-                            //            msg1Date.Content = recSub[i + 4];
-                            //        }
-                            //    }
-                            //}
-                            //else if (msg1Date.Content.ToString() == null || msg1Date.Content.ToString() == "" && recSub.Length == 0)
-                            //{
-                            //    while()
-                            //    for (int i = 0; i < recSub.Length; i += 5)
-                            //    {
-                            //        if (sentSub[i + 1] == convoSelect())
-                            //        {
-                            //            user1Lbl.Content = sentSub[i + 1];
-                            //            msg1Lbl.Content = sentSub[i + 3];
-                            //            msg1Date.Content = sentSub[i + 4];
-                            //        }
-                            //    }
-                            //}
-                            //else
-                            if (msg1Date.Content != null && msg1Date.Content.ToString() != "")
-                            {
-                                //for (int i = 0; i < recSub.Length; i += 5)
-                                //{
-                                if (recSub[1] == ConvoList.SelectedItem.ToString() && DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-                                {
-                                    Console.WriteLine(ConvoList.SelectedItem.ToString());
-                                    user3Lbl.Content = user2Lbl.Content;
-                                    msg3Lbl.Content = msg2Lbl.Content;
-                                    user2Lbl.Content = user1Lbl.Content;
-                                    msg2Lbl.Content = msg1Lbl.Content;
-                                    user1Lbl.Content = recSub[1];
-                                    msg1Lbl.Content = recSub[3];
-                                    msg1Date.Content = recSub[4];
-                                }
-                                //}
-                                //for (int i = 0; i < recSub.Length; i += 5)
-                                //{
-                                if (sentSub[2] == ConvoList.SelectedItem.ToString() && DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-                                {
-                                    user3Lbl.Content = user2Lbl.Content;
-                                    msg3Lbl.Content = msg2Lbl.Content;
-                                    user2Lbl.Content = user1Lbl.Content;
-                                    msg2Lbl.Content = msg1Lbl.Content;
-                                    user1Lbl.Content = sentSub[1];
-                                    msg1Lbl.Content = sentSub[3];
-                                    msg1Date.Content = sentSub[4];
-                                }
-                                //}
-                            }
+                            user3Lbl.Content = user2Lbl.Content;
+                            msg3Lbl.Content = msg2Lbl.Content;
+                            user2Lbl.Content = user1Lbl.Content;
+                            msg2Lbl.Content = msg1Lbl.Content;
+                            user1Lbl.Content = r.senUsername;
+                            msg1Lbl.Content = r.message;
+                            msg1Date.Content = r.dateEntered;
                         }
-                        else { msg1Lbl.Content = "Select A Conversation"; }
-                    }), DispatcherPriority.ContextIdle);
-                //}
-            }
+                    }
+                    foreach (SenMsg s in senMsg)
+                    {
+                        if ((s.recUsername == ConvoList.SelectedItem.ToString() && s.senUsername == theUser) &&
+                                s.dateEntered > Convert.ToDateTime(msg1Date.Content.ToString()))
+                        {
+                            user3Lbl.Content = user2Lbl.Content;
+                            msg3Lbl.Content = msg2Lbl.Content;
+                            user2Lbl.Content = user1Lbl.Content;
+                            msg2Lbl.Content = msg1Lbl.Content;
+                            user1Lbl.Content = s.senUsername;
+                            msg1Lbl.Content = s.message;
+                            msg1Date.Content = s.dateEntered;
+                        }
+                    }
+                } else { msg1Lbl.Content = "Select A Conversation"; }
+            }));
+            //if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
+            //{  
+            //    Console.WriteLine("Message Recieved");
+            //    //join comma messages back together later
+            //    List<Message> recMsgList = new List<Message>();
+            //    #region string simplification
+            //    recBody =recBody.Replace("{\"recievedMessages\":[", "");
+            //    recBody = recBody.Replace("],servMessage:undefinedrecieved}", "");
+            //    recBody = recBody.Replace("{\"_id\":", "");
+            //    recBody = recBody.Replace("\"senUsername\":", "");
+            //    recBody = recBody.Replace("\"recUsername\":", "");
+            //    recBody = recBody.Replace("\"message\":", "");
+            //    recBody = recBody.Replace("\"dateEntered\":", "");
+            //    recBody = recBody.Replace("__v\":0},\"", "");
+            //    recBody = recBody.Replace("\",\"", "§");
+
+            //    sentBody = sentBody.Replace("{\"sentMessages\":[", "");
+            //    sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
+            //    sentBody = sentBody.Replace("{\"_id\":", "");
+            //    sentBody = sentBody.Replace("\"senUsername\":", "");
+            //    sentBody = sentBody.Replace("\"recUsername\":", "");
+            //    sentBody = sentBody.Replace("\"message\":", "");
+            //    sentBody = sentBody.Replace("\"dateEntered\":", "");
+            //    sentBody = sentBody.Replace("__v\":0},\"", "");
+            //    sentBody = sentBody.Replace("\",\"", "§");
+            //    #endregion
+            //    Console.WriteLine(recBody);
+            //    Console.WriteLine(sentBody);
+            //    var recSub = recBody.Split('§');
+            //    var sentSub = sentBody.Split('§');
+            //    Console.WriteLine(recSub[0]);
+            //    //Console.WriteLine(convoSelect());
+            //        Dispatcher.Invoke(new Action(() => {
+            //            if (ConvoList.SelectedItem.ToString() != " ")
+            //            {
+            //                if (msg1Date.Content != null && msg1Date.Content.ToString() != "")
+            //                {
+            //                    //for (int i = 0; i < recSub.Length; i += 5)
+            //                    //{
+            //                    if (recSub[1] == ConvoList.SelectedItem.ToString() && DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
+            //                    {
+            //                        Console.WriteLine(ConvoList.SelectedItem.ToString());
+            //                        user3Lbl.Content = user2Lbl.Content;
+            //                        msg3Lbl.Content = msg2Lbl.Content;
+            //                        user2Lbl.Content = user1Lbl.Content;
+            //                        msg2Lbl.Content = msg1Lbl.Content;
+            //                        user1Lbl.Content = recSub[1];
+            //                        msg1Lbl.Content = recSub[3];
+            //                        msg1Date.Content = recSub[4];
+            //                    }
+            //                    //}
+            //                    //for (int i = 0; i < recSub.Length; i += 5)
+            //                    //{
+            //                    if (sentSub[2] == ConvoList.SelectedItem.ToString() && DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
+            //                    {
+            //                        user3Lbl.Content = user2Lbl.Content;
+            //                        msg3Lbl.Content = msg2Lbl.Content;
+            //                        user2Lbl.Content = user1Lbl.Content;
+            //                        msg2Lbl.Content = msg1Lbl.Content;
+            //                        user1Lbl.Content = sentSub[1];
+            //                        msg1Lbl.Content = sentSub[3];
+            //                        msg1Date.Content = sentSub[4];
+            //                    }
+            //                    //}
+            //                }
+            //            }
+            //            else { msg1Lbl.Content = "Select A Conversation"; }
+            //        }), DispatcherPriority.ContextIdle);
+            //    //}
+            //}
         }
         public async void getFriends()
         {
@@ -556,6 +615,51 @@ namespace CryptMessage
                         }));
                     }
                 }
+            }
+        }
+        private void repeatNewPassBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (repeatNewPassBox.Password != newPassBox.Password)
+            {
+                createUserMessageLbl.Content = "Passwords must match!";
+            }
+            else
+            {
+                createUserMessageLbl.Content = "";
+            }
+        }
+        private void newPassBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (repeatNewPassBox.Password != newPassBox.Password)
+            {
+                createUserMessageLbl.Content = "Passwords must match!";
+            }
+            else
+            {
+                createUserMessageLbl.Content = "";
+            }
+        }
+        private async void CreateUserBtn_Click(object sender, RoutedEventArgs e)
+        {
+            newUser newUser = new newUser(newUsernameTxtBox.Text,newEmailTxtBox.Text, newPassBox.Password);
+            string json = JsonConvert.SerializeObject(newUser);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var rec = await client.PostAsync(url + "createUser", data);
+            var res = rec.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(res);
+            createUserMessageLbl.Content = res;
+            if(res== "\"User created\"")
+            {
+                timer2.Stop();
+                page = "login"; 
+                newUsernameTxtBox.Text = "";
+                newEmailTxtBox.Text = "";
+                newPassBox.Password = "";
+                repeatNewPassBox.Password = "";
+                createUserMessageLbl.Content = "";
+                CreateUserBtn.Visibility = invisible;
+                updatePages(page);
+                LoginStatusLbl.Content = "User created. You may login.";
             }
         }
     }
