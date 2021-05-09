@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptMessage"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MouseLeave="Window_MouseLeave" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" MouseEnter="Window_MouseEnter" Drop="Window_Drop" Deactivated="Window_Deactivated" Background="#FFFF7500">
+        Title="MainWindow" Height="450" Width="800" MouseLeave="Window_MouseLeave" PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp" Activated="Window_Activated" MouseEnter="Window_MouseEnter" Drop="Window_Drop" Deactivated="Window_Deactivated" Background="#FFFF7500" Margin="0">
     <Grid ShowGridLines="False" Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -79,7 +79,7 @@
         <Label x:Name="LoginStatusLbl" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="6" VerticalAlignment="Top" Width="239" Margin="0,18,0,0" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
         <Label x:Name="debugLbl" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="26" Margin="0,18,0,0" Grid.Row="4" Grid.RowSpan="3" VerticalAlignment="Top" Width="160" Grid.ColumnSpan="2"/>
         <Label x:Name="user1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Width="79" Height="26" Background="White"/>
-        <Label x:Name="msg1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="15" Grid.ColumnSpan="6" Width="476" Height="26" Margin="0,-5,0,0" Grid.RowSpan="2" Visibility="Visible" Background="White"/>
+        <Label x:Name="msg1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="15" Grid.ColumnSpan="6" Width="476" Height="26" Margin="0,-5,0,0" Visibility="Visible" Background="White" Grid.RowSpan="2"/>
         <Label x:Name="user2Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Grid.Row="12" Grid.RowSpan="2" Width="79" Height="26" Background="White" Margin="0,16,0,0"/>
         <Label x:Name="msg2Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="12" Grid.ColumnSpan="6" Width="476" Height="26" Visibility="Visible" Background="White" Margin="0,16,0,0" Grid.RowSpan="2"/>
         <Label x:Name="user3Lbl" Content="" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="10" Grid.RowSpan="2" Width="79" Background="White" Margin="0,17,0,0"/>

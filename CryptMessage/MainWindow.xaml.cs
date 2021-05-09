@@ -65,27 +65,36 @@ namespace CryptMessage
     }
     class Message
     {
-        public string senUsername,recUsername,message;
+        public string senUsername, recUsername, message;
         public DateTime dateEntered;
-        public Message(string sender, string reciever, string mess,DateTime entered)
+        public Message(string sender, string reciever, string mess, DateTime entered)
         {
             senUsername = sender;
             recUsername = reciever;
             message = mess;
-            dateEntered =entered;
+            dateEntered = entered;
         }
-        public override string ToString()
+    }
+    class Messages
+    {
+        public string _id, senUsername, recUsername, message;
+        public DateTime dateEntered;
+        public Messages(string id, string sender, string reciever, string mess, DateTime entered)
         {
-            return "From: "+senUsername+"\n To: "+recUsername+"\n Message: "+message;
+            _id = id;
+            senUsername = sender;
+            recUsername = reciever;
+            message = mess;
+            dateEntered = entered;
         }
     }
     class RecMsg
     {
-        public string msgId, senUsername, recUsername, message;
+        public string _id, senUsername, recUsername, message;
         public DateTime dateEntered;
         public RecMsg(string id,string sender, string reciever, string mess, DateTime entered)
         {
-            msgId = id;
+            _id = id;
             senUsername = sender;
             recUsername = reciever;
             message = mess;
@@ -94,11 +103,11 @@ namespace CryptMessage
     }
     class SenMsg
     {
-        public string msgId, senUsername, recUsername, message;
+        public string _id, senUsername, recUsername, message;
         public DateTime dateEntered;
         public SenMsg(string id, string sender, string reciever, string mess, DateTime entered)
         {
-            msgId = id;
+            _id = id;
             senUsername = sender;
             recUsername = reciever;
             message = mess;
@@ -133,19 +142,29 @@ namespace CryptMessage
     }
     class Conversation
     {
-        public List<Message> convo = new List<Message>();
+        public string sender, reciever;
+        public Conversation(string u1, string u2)
+        {
+            sender = u1;
+            reciever = u2;
+        }
+    }
+    class sendFriendRequest
+    {
+        public string senUsername, recUsername;
+        public DateTime date;
+        public sendFriendRequest(string sen, string rec)
+        {
+            senUsername = sen;
+            recUsername = rec;
+            date = DateTime.Now;
+        }
     }
     class friendRequest
     {
         public string senUsername, recUsername;
         public bool status;
         public DateTime date;
-        public friendRequest(string sen, string rec)
-        {
-            senUsername = sen;
-            recUsername = rec;
-            date = DateTime.Now;
-        }
         public friendRequest(string sen,string rec, bool stat)
         {
             senUsername = sen;
@@ -162,6 +181,11 @@ namespace CryptMessage
             requests = req;
         }
     }
+    static class selFri
+    {
+        public static string friend;
+    }
+
     public partial class MainWindow : Window
     {
         
@@ -444,8 +468,12 @@ namespace CryptMessage
         }
         public async void MsgSendBtn_Click(object sender, RoutedEventArgs e)
         {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                selFri.friend = ConvoList.SelectedItem.ToString();
+            }));
             string sen = theUser, 
-                rec = SendToTxt.Text, 
+                rec = selFri.friend, 
                 mes = MsgTxtBox.Text;
             Message msg = new Message(sen, rec, mes, DateTime.Now);
             string json = JsonConvert.SerializeObject(msg);
@@ -492,7 +520,7 @@ namespace CryptMessage
         {
             string sen = theUser,
                 rec = NewFriendTxtBox.Text;
-            friendRequest req = new friendRequest(sen, rec);
+            sendFriendRequest req = new sendFriendRequest(sen, rec);
             string json = JsonConvert.SerializeObject(req);
             Console.WriteLine(json.ToString());
             var reqData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -529,18 +557,18 @@ namespace CryptMessage
         }
         public async void getFriends()
         {
-            usr userName = new usr(theUser);
-            string json = JsonConvert.SerializeObject(userName);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var rec = await client.PostAsync(url + "getFriends", data);
-            var res = rec.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(res);
             Dispatcher.Invoke(new Action(() =>
             {
                 ConvoList.Items.Clear();
                 ConvoList.Items.Add(" ");
                 ConvoList.SelectedItem = " ";
             }));
+            usr userName = new usr(theUser);
+            string json = JsonConvert.SerializeObject(userName);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var rec = await client.PostAsync(url + "getFriends", data);
+            var res = rec.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(res);
             if (res.Contains(theUser))
             {
                 res = res.Replace("\"", "");
@@ -570,147 +598,54 @@ namespace CryptMessage
             Timer timer1 = new Timer();
             timer1.Elapsed += new ElapsedEventHandler(getMsg);
             timer1.Elapsed += new ElapsedEventHandler(getFriendRequest);
-            timer1.Interval = 100;
+            timer1.Interval = 1000;
             timer1.Start();
         }
         public async void getMsg(object sender, EventArgs e)
         {
-            usr userName = new usr(theUser);
-            string json = JsonConvert.SerializeObject(userName);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var data1 = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var rec = await client.PostAsync(url + "recMessages", data);
-            var sent = await client.PostAsync(url + "sentMessages", data1);
-
-            string recBody = rec.Content.ReadAsStringAsync().Result;
-            string sentBody = sent.Content.ReadAsStringAsync().Result;
-
-            var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
-            dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(recBody, expConverter);
-            dynamic obj1 = JsonConvert.DeserializeObject<ExpandoObject>(sentBody, expConverter);
-
-            var recJson = JsonConvert.SerializeObject(obj.recievedMessages);
-            var senJson = JsonConvert.SerializeObject(obj1.sentMessages);
-
-            var recMsg = JsonConvert.DeserializeObject<List<RecMsg>>(recJson);
-            var senMsg = JsonConvert.DeserializeObject<List<SenMsg>>(senJson);
-            foreach (RecMsg rsm in recMsg)
-            {
-                Console.WriteLine(rsm.msgId);
-            }
-            Console.WriteLine(recBody);
-            Console.WriteLine(sentBody);
             Dispatcher.Invoke(new Action(() =>
             {
-                if (ConvoList.SelectedItem.ToString() != " ")
-                {
-                    foreach (RecMsg r in recMsg)
-                    {
-                        if ((r.recUsername == theUser && r.senUsername == ConvoList.SelectedItem.ToString()) &&
-                                r.dateEntered > Convert.ToDateTime(msg1Date.Content.ToString())
-                                && r.msgId != msg1ID.Text.ToString())
-                            Console.WriteLine(msg1ID.Text);
-                        {
-                            user3Lbl.Content = user2Lbl.Content;
-                            msg3Lbl.Content = msg2Lbl.Content;
-                            user2Lbl.Content = user1Lbl.Content;
-                            msg2Lbl.Content = msg1Lbl.Content;
-                            user1Lbl.Content = r.senUsername;
-                            msg1Lbl.Content = r.message;
-                            msg1ID.Text = r.msgId;
-                            msg1Date.Content = r.dateEntered;
-                        }
-                    }
-                    foreach (SenMsg s in senMsg)
-                    {
-                        if ((s.recUsername == theUser && s.senUsername == ConvoList.SelectedItem.ToString()) &&
-                                s.dateEntered > Convert.ToDateTime(msg1Date.Content.ToString())
-                                &&s.msgId != msg1ID.Text.ToString())
-                        {
-                            user3Lbl.Content = user2Lbl.Content;
-                            msg3Lbl.Content = msg2Lbl.Content;
-                            user2Lbl.Content = user1Lbl.Content;
-                            msg2Lbl.Content = msg1Lbl.Content;
-                            user1Lbl.Content = s.senUsername;
-                            msg1Lbl.Content = s.message;
-                            msg1ID.Text = s.msgId;
-                            msg1Date.Content = s.dateEntered;
-                        }
-                    }
-                }
-                else { msg1Lbl.Content = "Select A Conversation"; }
+                selFri.friend = ConvoList.SelectedItem.ToString();
             }));
-            //if (recBody.Contains("\"recUsername\":\"" + theUser + "\""))
-            //{  
-            //    Console.WriteLine("Message Recieved");
-            //    //join comma messages back together later
-            //    List<Message> recMsgList = new List<Message>();
-            //    #region string simplification
-            //    recBody =recBody.Replace("{\"recievedMessages\":[", "");
-            //    recBody = recBody.Replace("],servMessage:undefinedrecieved}", "");
-            //    recBody = recBody.Replace("{\"_id\":", "");
-            //    recBody = recBody.Replace("\"senUsername\":", "");
-            //    recBody = recBody.Replace("\"recUsername\":", "");
-            //    recBody = recBody.Replace("\"message\":", "");
-            //    recBody = recBody.Replace("\"dateEntered\":", "");
-            //    recBody = recBody.Replace("__v\":0},\"", "");
-            //    recBody = recBody.Replace("\",\"", "§");
+            if (selFri.friend != " ")
+            {
+                Console.WriteLine(selFri.friend);
+                Conversation c = new Conversation(theUser, selFri.friend.ToString());
+                string json = JsonConvert.SerializeObject(c);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var msg = await client.PostAsync(url + "allMessages", data);
+                string msgBody = msg.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(msgBody);
+                var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
+                dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(msgBody, expConverter);
+                var msgJson = JsonConvert.SerializeObject(obj.messages);
+                //var mmsgJson = JsonConvert.SerializeObject(obj.moreMessages);
+                var msgList = JsonConvert.DeserializeObject<List<Messages>>(msgJson);
+                
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    foreach (Messages m in msgList)
+                    {
+                        if (((m.recUsername == theUser && m.senUsername == selFri.friend) ||
+                            (m.recUsername == selFri.friend && m.senUsername == theUser)) &&
+                                m.dateEntered > Convert.ToDateTime(msg1Date.Content.ToString())
+                                && m._id != msg1ID.Text.ToString()
+                                )
+                        {
+                            user3Lbl.Content = user2Lbl.Content;
+                            msg3Lbl.Content = msg2Lbl.Content;
+                            user2Lbl.Content = user1Lbl.Content;
+                            msg2Lbl.Content = msg1Lbl.Content;
+                            user1Lbl.Content = m.senUsername;
+                            msg1Lbl.Content = m.message;
+                            msg1ID.Text = m._id;
+                            msg1Date.Content = m.dateEntered;
+                        }
+                    }
+                }));
+            }
+            else { Dispatcher.Invoke(new Action(() =>{ msg1Lbl.Content = "Select A Conversation"; })); }
 
-            //    sentBody = sentBody.Replace("{\"sentMessages\":[", "");
-            //    sentBody = sentBody.Replace("],servMessage:undefinedrecieved}", "");
-            //    sentBody = sentBody.Replace("{\"_id\":", "");
-            //    sentBody = sentBody.Replace("\"senUsername\":", "");
-            //    sentBody = sentBody.Replace("\"recUsername\":", "");
-            //    sentBody = sentBody.Replace("\"message\":", "");
-            //    sentBody = sentBody.Replace("\"dateEntered\":", "");
-            //    sentBody = sentBody.Replace("__v\":0},\"", "");
-            //    sentBody = sentBody.Replace("\",\"", "§");
-            //    #endregion
-            //    Console.WriteLine(recBody);
-            //    Console.WriteLine(sentBody);
-            //    var recSub = recBody.Split('§');
-            //    var sentSub = sentBody.Split('§');
-            //    Console.WriteLine(recSub[0]);
-            //    //Console.WriteLine(convoSelect());
-            //        Dispatcher.Invoke(new Action(() => {
-            //            if (ConvoList.SelectedItem.ToString() != " ")
-            //            {
-            //                if (msg1Date.Content != null && msg1Date.Content.ToString() != "")
-            //                {
-            //                    //for (int i = 0; i < recSub.Length; i += 5)
-            //                    //{
-            //                    if (recSub[1] == ConvoList.SelectedItem.ToString() && DateTime.Parse(recSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-            //                    {
-            //                        Console.WriteLine(ConvoList.SelectedItem.ToString());
-            //                        user3Lbl.Content = user2Lbl.Content;
-            //                        msg3Lbl.Content = msg2Lbl.Content;
-            //                        user2Lbl.Content = user1Lbl.Content;
-            //                        msg2Lbl.Content = msg1Lbl.Content;
-            //                        user1Lbl.Content = recSub[1];
-            //                        msg1Lbl.Content = recSub[3];
-            //                        msg1Date.Content = recSub[4];
-            //                    }
-            //                    //}
-            //                    //for (int i = 0; i < recSub.Length; i += 5)
-            //                    //{
-            //                    if (sentSub[2] == ConvoList.SelectedItem.ToString() && DateTime.Parse(sentSub[4]) > DateTime.Parse(msg1Date.Content.ToString()))
-            //                    {
-            //                        user3Lbl.Content = user2Lbl.Content;
-            //                        msg3Lbl.Content = msg2Lbl.Content;
-            //                        user2Lbl.Content = user1Lbl.Content;
-            //                        msg2Lbl.Content = msg1Lbl.Content;
-            //                        user1Lbl.Content = sentSub[1];
-            //                        msg1Lbl.Content = sentSub[3];
-            //                        msg1Date.Content = sentSub[4];
-            //                    }
-            //                    //}
-            //                }
-            //            }
-            //            else { msg1Lbl.Content = "Select A Conversation"; }
-            //        }), DispatcherPriority.ContextIdle);
-            //    //}
-            //}
         }
         public void setCreateUserBtn(object sender, EventArgs e)
         {
@@ -734,91 +669,87 @@ namespace CryptMessage
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var rec = await client.PostAsync(url + "getFriendRequests", data);
             var res = rec.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(res);
             if (res != "[]" && res != null)
             {
-                var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
-                dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(res, expConverter);
-                var Json = JsonConvert.SerializeObject(obj.friendRequest);
-                var friendReq = JsonConvert.DeserializeObject<List<friendRequest>>(Json);
-                Console.WriteLine(res);
-                if (friendReq != null)
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    newFriendRequestLbl.Content = friendReq.length() + " New Friend Requests!";
-                    foreach (friendRequest f in friendReq)
+                    //var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
+                    //dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(res, expConverter);
+                    //var Json = JsonConvert.SerializeObject(obj.friendRequest);
+                    var friendReq = JsonConvert.DeserializeObject<List<friendRequest>>(res);
+                    Console.WriteLine(res);
+                    if (friendReq.Count !=0&&friendReq!=null)
                     {
-                        Console.WriteLine(f.senUsername);
-                    }
-                    int c = 0;
-                    foreach (friendRequest f in friendReq)
-                    {
-                        Dispatcher.Invoke(new Action(() =>
-                        {
-                            friendRequestList.Items.Clear();
-                            friendRequestList.Items.Add(new Grid().Name = f.senUsername);
-                        }));
-                        c++;
-                    }
-                    foreach (Grid g in friendRequestList.Items)
-                    {
+                        newFriendRequestLbl.Content = friendReq.Count() + " New Friend Requests!";
+                        int c = 0;
 
-                        System.Windows.Thickness l = new Thickness
+                        foreach (friendRequest f in friendReq)
                         {
-                            Top = -4.0,
-                            Bottom = -4.0
-                        };
-                        System.Windows.Thickness b1 = new Thickness
-                        {
-                            Right = 10
-                        };
-                        System.Windows.Thickness b2 = new Thickness
-                        {
-                            Left = 10
-                        };
-                        Dispatcher.Invoke(new Action(() =>
-                        {
-                            g.RowDefinitions.Add(new RowDefinition());
-                            g.ColumnDefinitions.Add(new ColumnDefinition());//width 320
-                            g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
-                            g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
-                            new Label()
-                            {
-                                Content = g.Name,
-                                FontSize = 16,
-                                Margin = l,
-                                Width=320,
-                                //.SetValue(Grid.ColumnProperty, 0)
-                                
-                            };
-                            new Button()
-                            {
-                               Content = "Accept",
-                                Margin = b1,
-                                FontSize = 13,
-                                Width=60,
-                                //Background=
-                                //Column=1
-                                //Click=friendRequestResponse(g.name,theUser,true)
-                            };
-                            new Button()
-                            {
-                                Content = "Deny",
-                                Margin = b2,
-                                FontSize = 13,
-                                Width = 60,
-                                //Background=
-                                //Column=2
-                                //Click=friendRequestResponse(g.name,theUser,null)
-                            };
-                        }));
-                        c++;
+                            Console.WriteLine(f);
+                            //if(f.status!=true)
+                            //friendRequestList.Items.Clear();
+                            friendRequestList.Items.Add(new Grid().Name = f.senUsername);
+                            //foreach (Grid g in friendRequestList.Items)
+                            //{
+                            //    System.Windows.Thickness l = new Thickness
+                            //    {
+                            //        Top = -4.0,
+                            //        Bottom = -4.0
+                            //    };
+                            //    System.Windows.Thickness b1 = new Thickness
+                            //    {
+                            //        Right = 10
+                            //    };
+                            //    System.Windows.Thickness b2 = new Thickness
+                            //    {
+                            //        Left = 10
+                            //    };
+                            //    g.RowDefinitions.Add(new RowDefinition());
+                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 320
+                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
+                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
+                            //    new Label()
+                            //    {
+                            //        Content = g.Name,
+                            //        FontSize = 16,
+                            //        Margin = l,
+                            //        Width = 320,
+                            //        //.SetValue(Grid.ColumnProperty, 0)
+
+                            //    };
+                            //    new Button()
+                            //    {
+                            //        Content = "Accept",
+                            //        Margin = b1,
+                            //        FontSize = 13,
+                            //        Width = 60,
+                            //        //Background=
+                            //        //Column=1
+                            //        //Click=friendRequestResponse(g.name,theUser,true)
+                            //    };
+                            //    new Button()
+                            //    {
+                            //        Content = "Deny",
+                            //        Margin = b2,
+                            //        FontSize = 13,
+                            //        Width = 60,
+                            //        //Background=
+                            //        //Column=2
+                            //        //Click=friendRequestResponse(g.name,theUser,null)
+                            //    };
+                            //    c++;
+                            //}
+                        }
+                        
                     }
-                }
+                }));
             }
         }
 
 
         #endregion
 
-        
+
     }
 }
