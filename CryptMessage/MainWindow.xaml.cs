@@ -482,12 +482,16 @@ namespace CryptMessage
         }
         private async void requestAccept_Click(object sender, RoutedEventArgs e)
         {
-            var s=friendRequestList.SelectedItem.ToString();
+            Dispatcher.Invoke(new Action(() =>
+            {
+                selFri.friend = friendRequestList.SelectedItem.ToString();
+            }));
+            var s = selFri.friend;
             friendRequest acc = new friendRequest(s, theUser, true);
             string json = JsonConvert.SerializeObject(acc);
             Console.WriteLine(json.ToString());
             var Data = new StringContent(json, Encoding.UTF8, "application/json");
-            var res = await client.PostAsync(url + "sendFriendRequest", Data);
+            var res = await client.PostAsync(url + "acceptFriendRequest", Data);
             string body = res.Content.ReadAsStringAsync().Result;
             Console.WriteLine(body);
             if(body.Contains("Friend Request Accepted"))
@@ -497,9 +501,32 @@ namespace CryptMessage
         }
         private async void requestDeny_Click(object sender, RoutedEventArgs e)
         {
-            var s = friendRequestList.SelectedItem.ToString();
+            Dispatcher.Invoke(new Action(() =>
+            {
+                selFri.friend = friendRequestList.SelectedItem.ToString();
+            }));
+            var s = selFri.friend;
             friendRequest acc = new friendRequest(s, theUser, true);
             string json = JsonConvert.SerializeObject(acc);
+            Console.WriteLine(json.ToString());
+            var Data = new StringContent(json, Encoding.UTF8, "application/json");
+            var res = await client.PostAsync(url + "acceptFriendRequest", Data);
+            string body = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(body);
+            if (body.Contains("Friend Request Denied"))
+            {
+                friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+            }
+        }
+        private async void DelFriendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                selFri.friend = ConvoList.SelectedItem.ToString();
+            }));
+            var s = selFri.friend;
+            friendRequest del = new friendRequest(s, theUser, true);
+            string json = JsonConvert.SerializeObject(del);
             Console.WriteLine(json.ToString());
             var Data = new StringContent(json, Encoding.UTF8, "application/json");
             var res = await client.PostAsync(url + "sendFriendRequest", Data);
@@ -507,7 +534,7 @@ namespace CryptMessage
             Console.WriteLine(body);
             if (body.Contains("Friend Request Denied"))
             {
-                friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+                friendRequestList.Items.Remove(ConvoList.SelectedItem);
             }
         }
         #endregion
