@@ -74,8 +74,6 @@
         <PasswordBox x:Name="loginPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="10" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,39,0" TabIndex="2" Background="#FF1280B4" Height="21"/>
         <Button x:Name="LoginBtn" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="4" Grid.ColumnSpan="3" Width="239" Click="LoginBtn_Click" TabIndex="3" Background="#FF8045FF"/>
         <Button x:Name="NewUserBtn" Content="Create New User" Grid.ColumnSpan="4" Grid.Column="3" Margin="78,19,0,0" Grid.Row="12" Grid.RowSpan="2" Background="#FF8045FF" Click="NewUserBtn_Click"/>
-        <Label x:Name="SendToLbl"  Content="Send To:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="16" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,0,0" RenderTransformOrigin="0.709,0.115" Width="79"/>
-        <TextBox x:Name="SendToTxt"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="21" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2" Grid.Row="16" AllowDrop="False" TabIndex="4" Background="#FF1280B4" Margin="0,16,0,0" Grid.RowSpan="2"/>
         <Label x:Name="LoginStatusLbl" Content="Login Status" Grid.Column="4" HorizontalAlignment="Left" Height="27" Grid.Row="6" VerticalAlignment="Top" Width="239" Margin="0,18,0,0" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
         <Label x:Name="debugLbl" Content="Server Debug" Grid.Column="4" HorizontalAlignment="Left" Height="26" Margin="0,18,0,0" Grid.Row="4" Grid.RowSpan="3" VerticalAlignment="Top" Width="160" Grid.ColumnSpan="2"/>
         <Label x:Name="user1Lbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="0,16,0,0" Grid.Row="14" Grid.RowSpan="2" Width="79" Height="26" Background="White"/>
@@ -107,22 +105,10 @@
         <PasswordBox x:Name="repeatNewPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="11" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,0,0" TabIndex="4" Background="#FFC81211" Visibility="Hidden" KeyUp="repeatNewPassBox_KeyUp"/>
         <Label x:Name="createUserMessageLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="4" Margin="0,18,0,0" Grid.Row="11" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="239"/>
         <Label x:Name="newFriendRequestLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Width="158" Margin="0,17,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontWeight="Bold"/>
-        <ListBox x:Name="friendRequestList" Grid.ColumnSpan="6" HorizontalAlignment="Left" Height="252" Grid.RowSpan="12" VerticalAlignment="Top" Width="476" Grid.Column="2" Grid.Row="4" Background="#FF1280B4" Visibility="Hidden">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="320"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="hi" Grid.Column="0" FontSize="16" Margin="0,-4"/>
-                <Button Grid.Column="1" Content="Accept" Margin="0,0,10,0" Background="#FF02B902" FontSize="13"/>
-                <Button Grid.Column="2" Content="Deny" Margin="10,0,0,0" Background="#FFE40000" FontSize="13"/>
-            </Grid>
-        </ListBox>
-
+        <ListBox x:Name="friendRequestList" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="252" Grid.RowSpan="12" VerticalAlignment="Top" Width="318" Grid.Column="2" Grid.Row="4" Background="#FF1280B4" Visibility="Hidden"/>
+        <Label x:Name="reqBtnBkg" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.395,0.476" Grid.Column="6" Grid.Row="4" Grid.ColumnSpan="2" Width="158" Height="252" Grid.RowSpan="12" Background="#FF1280B4" Visibility="Hidden"/>
+        <Button x:Name="requestAccept" Content="Accept" Background="#FF02B902" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Grid.Column="6" Margin="0,1,0,0" Grid.Row="4" Grid.ColumnSpan="2" Height="41" Grid.RowSpan="2" FontWeight="Bold" Visibility="Hidden" Click="requestAccept_Click"/>
+        <Button x:Name="requestDeny" Content="Deny" Background="#FFE40000" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Grid.Column="6" Grid.Row="7" Grid.ColumnSpan="2" Height="42" Grid.RowSpan="2" FontWeight="Bold" Visibility="Hidden" Click="requestDeny_Click"/>
     </Grid>
 
 </Window>

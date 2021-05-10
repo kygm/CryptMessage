@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection.Metadata;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
 using Newtonsoft.Json;
@@ -88,32 +80,6 @@ namespace CryptMessage
             dateEntered = entered;
         }
     }
-    class RecMsg
-    {
-        public string _id, senUsername, recUsername, message;
-        public DateTime dateEntered;
-        public RecMsg(string id,string sender, string reciever, string mess, DateTime entered)
-        {
-            _id = id;
-            senUsername = sender;
-            recUsername = reciever;
-            message = mess;
-            dateEntered = entered;
-        }
-    }
-    class SenMsg
-    {
-        public string _id, senUsername, recUsername, message;
-        public DateTime dateEntered;
-        public SenMsg(string id, string sender, string reciever, string mess, DateTime entered)
-        {
-            _id = id;
-            senUsername = sender;
-            recUsername = reciever;
-            message = mess;
-            dateEntered = entered;
-        }
-    }
     class newUser
     {
         public string username, email, password;
@@ -122,22 +88,6 @@ namespace CryptMessage
             username = u;
             email = e;
             password = p;
-        }
-    }
-    class recievedMessages
-    {
-        public List<RecMsg> recieved = new List<RecMsg>(); 
-        public recievedMessages(List<RecMsg> rec)
-        {
-            recieved = rec;
-        }
-    }
-    class sentMessages
-    {
-        public List<SenMsg> sent = new List<SenMsg>();
-        public sentMessages(List<SenMsg> sen)
-        {
-            sent = sen;
         }
     }
     class Conversation
@@ -162,15 +112,14 @@ namespace CryptMessage
     }
     class friendRequest
     {
-        public string senUsername, recUsername;
-        public bool status;
+        public string firstUsername, secondUsername;
+        public bool accepted;
         public DateTime date;
         public friendRequest(string sen,string rec, bool stat)
         {
-            senUsername = sen;
-            recUsername = rec;
-            status = stat;
-            date = DateTime.Now;
+            firstUsername = sen;
+            secondUsername = rec;
+            accepted = stat;
         }
     }
     class friendRequestList
@@ -257,8 +206,6 @@ namespace CryptMessage
                 MsgTxtBox.Visibility = visState;
                 MsgSendBtn.Visibility = visState;
                 UsernameDisplayLbl.Visibility = visState;
-                SendToLbl.Visibility = visState;
-                SendToTxt.Visibility = visState;
                 user1Lbl.Visibility = visState;
                 user2Lbl.Visibility = visState;
                 user3Lbl.Visibility = visState;
@@ -528,8 +475,41 @@ namespace CryptMessage
             var res = await client.PostAsync(url + "sendFriendRequest", reqData);
             string body = res.Content.ReadAsStringAsync().Result;
             Console.WriteLine(body);
+            if(body.Contains("request sent"))
+            {
+                NewFriendTxtBox.Text = "";
+            }
         }
-
+        private async void requestAccept_Click(object sender, RoutedEventArgs e)
+        {
+            var s=friendRequestList.SelectedItem.ToString();
+            friendRequest acc = new friendRequest(s, theUser, true);
+            string json = JsonConvert.SerializeObject(acc);
+            Console.WriteLine(json.ToString());
+            var Data = new StringContent(json, Encoding.UTF8, "application/json");
+            var res = await client.PostAsync(url + "sendFriendRequest", Data);
+            string body = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(body);
+            if(body.Contains("Friend Request Accepted"))
+            {
+                friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+            }
+        }
+        private async void requestDeny_Click(object sender, RoutedEventArgs e)
+        {
+            var s = friendRequestList.SelectedItem.ToString();
+            friendRequest acc = new friendRequest(s, theUser, true);
+            string json = JsonConvert.SerializeObject(acc);
+            Console.WriteLine(json.ToString());
+            var Data = new StringContent(json, Encoding.UTF8, "application/json");
+            var res = await client.PostAsync(url + "sendFriendRequest", Data);
+            string body = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(body);
+            if (body.Contains("Friend Request Denied"))
+            {
+                friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+            }
+        }
         #endregion
 
         #region Get/Send/Passive functions
@@ -674,82 +654,49 @@ namespace CryptMessage
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    //var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
-                    //dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(res, expConverter);
-                    //var Json = JsonConvert.SerializeObject(obj.friendRequest);
                     var friendReq = JsonConvert.DeserializeObject<List<friendRequest>>(res);
                     Console.WriteLine(res);
-                    if (friendReq.Count !=0&&friendReq!=null)
+                    int reqs = 0;
+                    foreach (friendRequest f in friendReq)
                     {
-                        newFriendRequestLbl.Content = friendReq.Count() + " New Friend Requests!";
-                        int c = 0;
-
+                        if (f.accepted != true)
+                        {
+                            reqs++;
+                        }
+                    }
+                    if (reqs !=0&&friendReq!=null)
+                    {
+                        newFriendRequestLbl.Content = reqs + " New Friend Requests!";
+                        
+                        friendRequestList.Items.Clear();
                         foreach (friendRequest f in friendReq)
                         {
-                            Console.WriteLine(f);
-                            //if(f.status!=true)
-                            //friendRequestList.Items.Clear();
-                            friendRequestList.Items.Add(new Grid().Name = f.senUsername);
-                            //foreach (Grid g in friendRequestList.Items)
-                            //{
-                            //    System.Windows.Thickness l = new Thickness
-                            //    {
-                            //        Top = -4.0,
-                            //        Bottom = -4.0
-                            //    };
-                            //    System.Windows.Thickness b1 = new Thickness
-                            //    {
-                            //        Right = 10
-                            //    };
-                            //    System.Windows.Thickness b2 = new Thickness
-                            //    {
-                            //        Left = 10
-                            //    };
-                            //    g.RowDefinitions.Add(new RowDefinition());
-                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 320
-                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
-                            //    g.ColumnDefinitions.Add(new ColumnDefinition());//width 70
-                            //    new Label()
-                            //    {
-                            //        Content = g.Name,
-                            //        FontSize = 16,
-                            //        Margin = l,
-                            //        Width = 320,
-                            //        //.SetValue(Grid.ColumnProperty, 0)
-
-                            //    };
-                            //    new Button()
-                            //    {
-                            //        Content = "Accept",
-                            //        Margin = b1,
-                            //        FontSize = 13,
-                            //        Width = 60,
-                            //        //Background=
-                            //        //Column=1
-                            //        //Click=friendRequestResponse(g.name,theUser,true)
-                            //    };
-                            //    new Button()
-                            //    {
-                            //        Content = "Deny",
-                            //        Margin = b2,
-                            //        FontSize = 13,
-                            //        Width = 60,
-                            //        //Background=
-                            //        //Column=2
-                            //        //Click=friendRequestResponse(g.name,theUser,null)
-                            //    };
-                            //    c++;
-                            //}
+                            if (f != null&&f.accepted!=true)
+                            {
+                                Console.WriteLine(f.secondUsername.ToString());
+                                friendRequestList.Items.Add(f.secondUsername.ToString());
+                            }
                         }
                         
                     }
                 }));
             }
         }
+        public void getSelectedRequest(object sender, EventArgs e)
+        {
+            if(friendRequestList.SelectedItem.ToString()!=" ")
+            {
+                requestAccept.Visibility = visible;
+                requestDeny.Visibility = visible;
+            }
+            else
+            {
+                requestAccept.Visibility = invisible;
+                requestDeny.Visibility = invisible;
+            }
+        }
 
 
         #endregion
-
-
     }
 }
