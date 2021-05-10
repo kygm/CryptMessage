@@ -105,7 +105,9 @@
         <PasswordBox x:Name="repeatNewPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="11" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,0,0" TabIndex="4" Background="#FFC81211" Visibility="Hidden" KeyUp="repeatNewPassBox_KeyUp"/>
         <Label x:Name="createUserMessageLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="4" Margin="0,18,0,0" Grid.Row="11" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="239"/>
         <Label x:Name="newFriendRequestLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Width="158" Margin="0,17,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontWeight="Bold"/>
-        <ListBox x:Name="friendRequestList" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="252" Grid.RowSpan="12" VerticalAlignment="Top" Width="318" Grid.Column="2" Grid.Row="4" Background="#FF1280B4" Visibility="Hidden"/>
+        <ListBox x:Name="friendRequestList" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="252" Grid.RowSpan="12" VerticalAlignment="Top" Width="318" Grid.Column="2" Grid.Row="4" Background="#FF1280B4" Visibility="Hidden">
+            
+        </ListBox>
         <Label x:Name="reqBtnBkg" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.395,0.476" Grid.Column="6" Grid.Row="4" Grid.ColumnSpan="2" Width="158" Height="252" Grid.RowSpan="12" Background="#FF1280B4" Visibility="Hidden"/>
         <Button x:Name="requestAccept" Content="Accept" Background="#FF02B902" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Grid.Column="6" Margin="0,1,0,0" Grid.Row="4" Grid.ColumnSpan="2" Height="41" Grid.RowSpan="2" FontWeight="Bold" Visibility="Hidden" Click="requestAccept_Click"/>
         <Button x:Name="requestDeny" Content="Deny" Background="#FFE40000" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Grid.Column="6" Grid.Row="7" Grid.ColumnSpan="2" Height="42" Grid.RowSpan="2" FontWeight="Bold" Visibility="Hidden" Click="requestDeny_Click"/>

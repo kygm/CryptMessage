@@ -497,6 +497,7 @@ namespace CryptMessage
             if(body.Contains("Friend Request Accepted"))
             {
                 friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+                friendRequestList.SelectedItem = " ";
             }
         }
         private async void requestDeny_Click(object sender, RoutedEventArgs e)
@@ -506,7 +507,7 @@ namespace CryptMessage
                 selFri.friend = friendRequestList.SelectedItem.ToString();
             }));
             var s = selFri.friend;
-            friendRequest acc = new friendRequest(s, theUser, true);
+            friendRequest acc = new friendRequest(s, theUser, false);
             string json = JsonConvert.SerializeObject(acc);
             Console.WriteLine(json.ToString());
             var Data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -516,6 +517,7 @@ namespace CryptMessage
             if (body.Contains("Friend Request Denied"))
             {
                 friendRequestList.Items.Remove(friendRequestList.SelectedItem);
+                friendRequestList.SelectedItem = " ";
             }
         }
         private async void DelFriendBtn_Click(object sender, RoutedEventArgs e)
@@ -534,7 +536,8 @@ namespace CryptMessage
             Console.WriteLine(body);
             if (body.Contains("Friend Request Denied"))
             {
-                friendRequestList.Items.Remove(ConvoList.SelectedItem);
+                ConvoList.Items.Remove(ConvoList.SelectedItem);
+                ConvoList.SelectedItem = " ";
             }
         }
         #endregion
@@ -569,6 +572,11 @@ namespace CryptMessage
                 ConvoList.Items.Clear();
                 ConvoList.Items.Add(" ");
                 ConvoList.SelectedItem = " ";
+                if(friendRequestList.Items.Contains(" ") == false)
+                {
+                    friendRequestList.Items.Add(" ");
+                    friendRequestList.SelectedItem = " ";
+                }
             }));
             usr userName = new usr(theUser);
             string json = JsonConvert.SerializeObject(userName);
@@ -602,11 +610,13 @@ namespace CryptMessage
         }
         public void checkMsg()
         {
-            Timer timer1 = new Timer();
-            timer1.Elapsed += new ElapsedEventHandler(getMsg);
+            Timer timer1 = new Timer { Interval=1000 };
+            Timer timer2 = new Timer { Interval = 10000 };
             timer1.Elapsed += new ElapsedEventHandler(getFriendRequest);
-            timer1.Interval = 1000;
+            timer1.Elapsed += new ElapsedEventHandler(getSelectedRequest);
+            timer2.Elapsed += new ElapsedEventHandler(getMsg);
             timer1.Start();
+            timer2.Start();
         }
         public async void getMsg(object sender, EventArgs e)
         {
@@ -670,17 +680,18 @@ namespace CryptMessage
             }));
         }
         public async void getFriendRequest(object sender, EventArgs e)
-        {
+        { 
             usr userName = new usr(theUser);
             string json = JsonConvert.SerializeObject(userName);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var rec = await client.PostAsync(url + "getFriendRequests", data);
             var res = rec.Content.ReadAsStringAsync().Result;
             Console.WriteLine(res);
+            
             if (res != "[]" && res != null)
             {
                 Dispatcher.Invoke(new Action(() =>
-                {
+                { 
                     var friendReq = JsonConvert.DeserializeObject<List<friendRequest>>(res);
                     Console.WriteLine(res);
                     int reqs = 0;
@@ -695,13 +706,13 @@ namespace CryptMessage
                     {
                         newFriendRequestLbl.Content = reqs + " New Friend Requests!";
                         
-                        friendRequestList.Items.Clear();
                         foreach (friendRequest f in friendReq)
-                        {
-                            if (f != null&&f.accepted!=true)
+                        { 
+                            if (f != null&&f.accepted!=true&&
+                            friendRequestList.Items.Contains(f.secondUsername)==false)
                             {
                                 Console.WriteLine(f.secondUsername.ToString());
-                                friendRequestList.Items.Add(f.secondUsername.ToString());
+                                friendRequestList.Items.Add(f.secondUsername);
                             }
                         }
                         
@@ -711,16 +722,23 @@ namespace CryptMessage
         }
         public void getSelectedRequest(object sender, EventArgs e)
         {
-            if(friendRequestList.SelectedItem.ToString()!=" ")
+            Dispatcher.Invoke(new Action(() =>
             {
-                requestAccept.Visibility = visible;
-                requestDeny.Visibility = visible;
-            }
-            else
-            {
-                requestAccept.Visibility = invisible;
-                requestDeny.Visibility = invisible;
-            }
+                if (friendRequestList.SelectedItem == null) {
+                    friendRequestList.SelectedItem = " ";
+                }
+                if (friendRequestList.SelectedItem.ToString() != " ")
+                {
+                    requestAccept.Visibility = visible;
+                    requestDeny.Visibility = visible;
+                }
+                else
+                {
+                    requestAccept.Visibility = invisible;
+                    requestDeny.Visibility = invisible;
+                }
+
+            }));
         }
 
 
