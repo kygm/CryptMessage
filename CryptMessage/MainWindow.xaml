@@ -54,6 +54,7 @@
                 <MenuItem x:Name="HomeMnu" Header="Home" Click="HomeMnu_Click" Background="#FF8045FF"/>
                 <MenuItem x:Name="FriendsMnu" Header="Friends" Click="FriendsMnu_Click" Background="#FF8045FF"/>
                 <MenuItem x:Name="AboutMnu" Header="About" Click="AboutMnu_Click" Background="#FF8045FF"/>
+                <MenuItem x:Name="LogoutMnu" Header="Logout" Click="LogoutMnu_Click" Background="#FF8045FF"/>
             </Menu>
             <Label  x:Name="About1" Content="The purpose of this app is to have a reasonably secure method of communication to use for those who wish thier words to be kept private." Height="401" VerticalAlignment="Top" Visibility="Hidden"/>
         </DockPanel>
@@ -104,7 +105,7 @@
         <Label x:Name="repeatNewPasswordLbl" Content="Repeat Password" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="3" Margin="40,18,0,0" Grid.RowSpan="3" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <PasswordBox x:Name="repeatNewPassBox" VerticalAlignment="Top" PasswordChar="*" Grid.Row="11" Grid.Column="5" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2" Margin="0,0,0,0" TabIndex="4" Background="#FFC81211" Visibility="Hidden" KeyUp="repeatNewPassBox_KeyUp"/>
         <Label x:Name="createUserMessageLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="4" Margin="0,18,0,0" Grid.Row="11" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="239"/>
-        <Label x:Name="newFriendRequestLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Width="158" Margin="0,17,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontWeight="Bold"/>
+        <Label x:Name="newFriendRequestLbl" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Width="158" Margin="0,15,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontWeight="Bold"/>
         <ListBox x:Name="friendRequestList" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="252" Grid.RowSpan="12" VerticalAlignment="Top" Width="318" Grid.Column="2" Grid.Row="4" Background="#FF1280B4" Visibility="Hidden">
             
         </ListBox>

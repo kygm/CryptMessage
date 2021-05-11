@@ -13,6 +13,8 @@ using System.Xml;
 using Newtonsoft.Json;
 using System.Dynamic;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace CryptMessage
 {
@@ -101,12 +103,12 @@ namespace CryptMessage
     }
     class sendFriendRequest
     {
-        public string senUsername, recUsername;
+        public string sender, reciever;
         public DateTime date;
         public sendFriendRequest(string sen, string rec)
         {
-            senUsername = sen;
-            recUsername = rec;
+            sender = sen;
+            reciever = rec;
             date = DateTime.Now;
         }
     }
@@ -115,10 +117,22 @@ namespace CryptMessage
         public string firstUsername, secondUsername;
         public bool accepted;
         public DateTime date;
-        public friendRequest(string sen,string rec, bool stat)
+        public friendRequest(string rec, string sen, bool stat)
         {
-            firstUsername = sen;
-            secondUsername = rec;
+            firstUsername = rec;
+            secondUsername = sen;
+            accepted = stat;
+        }
+    }
+    class ansFriendRequest
+    {
+        public string sender, reciever;
+        public bool accepted;
+        public DateTime date;
+        public ansFriendRequest(string sen, string rec, bool stat)
+        {
+            sender = sen;
+            reciever = rec;
             accepted = stat;
         }
     }
@@ -149,12 +163,15 @@ namespace CryptMessage
         string theUser;
         int ticks = 0;
         Timer timer2 = new Timer();
+        Aes crypt = Aes.Create();
         public MainWindow()
         {
             client.BaseAddress = server;
             InitializeComponent();
             page = "login";
             updatePages(page);
+            crypt.Key = Convert.FromBase64String("RXm0SVPom1hwwXQ4arW6peb2xOQGpKVMteV2wxersxw=");
+            crypt.IV = Convert.FromBase64String("fwL/JhlO5VxSJcuf0UK6HA==");
         }
 
 
@@ -166,8 +183,10 @@ namespace CryptMessage
             {
                 menuVis = false;
                 AboutMnu.Visibility = Visibility.Hidden;
+                LogoutMnu.Visibility = Visibility.Hidden;
             }
-            else { menuVis = true; AboutMnu.Visibility = Visibility.Visible; }
+            else { menuVis = true; AboutMnu.Visibility = Visibility.Visible; 
+                   LogoutMnu.Visibility = Visibility.Visible; }
             if (page == "newUser")
             {
                 timer2.Elapsed += new ElapsedEventHandler(setCreateUserBtn);
@@ -214,7 +233,7 @@ namespace CryptMessage
                 msg3Lbl.Visibility = visState;
                 newFriendRequestLbl.Visibility = visState;
             }
-            private void aboutVis(String page)
+        private void aboutVis(String page)
             {
                 System.Windows.Visibility visState;
                 if (page == "about")
@@ -224,7 +243,7 @@ namespace CryptMessage
                 else { visState = invisible; }
                 About1.Visibility = visState;
             }
-            private void friendManageVis(String page)
+        private void friendManageVis(String page)
             {
                 System.Windows.Visibility visState;
                 if (page == "friends")
@@ -237,7 +256,7 @@ namespace CryptMessage
                 NewFriendTxtBox.Visibility = visState;
                 sendFriendRequestBtn.Visibility = visState;
             }
-            private void settingsVis(String page) {
+        private void settingsVis(String page) {
                 System.Windows.Visibility visState;
                 if (page == "settings")
                 {
@@ -358,6 +377,15 @@ namespace CryptMessage
             page = "about";
             updatePages(page);
         }
+        private void LogoutMnu_Click(object sender, RoutedEventArgs e)
+        {
+            page = "login";
+            updatePages(page);
+            loginPassBox.Password = "";
+            usernameTxtBox.Text = "";
+            timer1.Stop();
+            timer3.Stop();
+        }
         private void NewUserBtn_Click(object sender, RoutedEventArgs e)
         {
             page = "newUser";
@@ -419,9 +447,10 @@ namespace CryptMessage
             {
                 selFri.friend = ConvoList.SelectedItem.ToString();
             }));
+            byte[] encrypted = Encrypt(MsgTxtBox.Text, crypt.Key, crypt.IV);
             string sen = theUser, 
                 rec = selFri.friend, 
-                mes = MsgTxtBox.Text;
+                mes = Convert.ToBase64String(encrypted);
             Message msg = new Message(sen, rec, mes, DateTime.Now);
             string json = JsonConvert.SerializeObject(msg);
             Console.WriteLine(json.ToString());
@@ -487,7 +516,7 @@ namespace CryptMessage
                 selFri.friend = friendRequestList.SelectedItem.ToString();
             }));
             var s = selFri.friend;
-            friendRequest acc = new friendRequest(s, theUser, true);
+            ansFriendRequest acc = new ansFriendRequest(s, theUser, true);
             string json = JsonConvert.SerializeObject(acc);
             Console.WriteLine(json.ToString());
             var Data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -507,7 +536,7 @@ namespace CryptMessage
                 selFri.friend = friendRequestList.SelectedItem.ToString();
             }));
             var s = selFri.friend;
-            friendRequest acc = new friendRequest(s, theUser, false);
+            ansFriendRequest acc = new ansFriendRequest(s, theUser, false);
             string json = JsonConvert.SerializeObject(acc);
             Console.WriteLine(json.ToString());
             var Data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -589,7 +618,7 @@ namespace CryptMessage
                 res = res.Replace("\"", "");
                 res = res.Replace("_id:", "");
                 res = res.Replace("accepted:", "");
-                res = res.Replace("firstUsername:", "");
+                res = res.Replace("sender:", "");
                 res = res.Replace("secondUsername:", "");
                 res = res.Replace("dateEntered:", "");
                 var friendList = res.Split(',');
@@ -608,15 +637,15 @@ namespace CryptMessage
                 }
             }
         }
+        Timer timer1 = new Timer { Interval = 1000 };
+        Timer timer3 = new Timer { Interval = 10000 };
         public void checkMsg()
-        {
-            Timer timer1 = new Timer { Interval=1000 };
-            Timer timer2 = new Timer { Interval = 10000 };
+        { 
             timer1.Elapsed += new ElapsedEventHandler(getFriendRequest);
             timer1.Elapsed += new ElapsedEventHandler(getSelectedRequest);
-            timer2.Elapsed += new ElapsedEventHandler(getMsg);
+            timer3.Elapsed += new ElapsedEventHandler(getMsg);
             timer1.Start();
-            timer2.Start();
+            timer3.Start();
         }
         public async void getMsg(object sender, EventArgs e)
         {
@@ -636,7 +665,6 @@ namespace CryptMessage
                 var expConverter = new Newtonsoft.Json.Converters.ExpandoObjectConverter();
                 dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(msgBody, expConverter);
                 var msgJson = JsonConvert.SerializeObject(obj.messages);
-                //var mmsgJson = JsonConvert.SerializeObject(obj.moreMessages);
                 var msgList = JsonConvert.DeserializeObject<List<Messages>>(msgJson);
                 
                 Dispatcher.Invoke(new Action(() =>
@@ -649,12 +677,13 @@ namespace CryptMessage
                                 && m._id != msg1ID.Text.ToString()
                                 )
                         {
+                            string decrypted = Decrypt(Convert.FromBase64String(m.message), crypt.Key, crypt.IV);
                             user3Lbl.Content = user2Lbl.Content;
                             msg3Lbl.Content = msg2Lbl.Content;
                             user2Lbl.Content = user1Lbl.Content;
                             msg2Lbl.Content = msg1Lbl.Content;
                             user1Lbl.Content = m.senUsername;
-                            msg1Lbl.Content = m.message;
+                            msg1Lbl.Content = decrypted;
                             msg1ID.Text = m._id;
                             msg1Date.Content = m.dateEntered;
                         }
@@ -709,9 +738,9 @@ namespace CryptMessage
                         foreach (friendRequest f in friendReq)
                         { 
                             if (f != null&&f.accepted!=true&&
-                            friendRequestList.Items.Contains(f.secondUsername)==false)
+                            friendRequestList.Items.Contains(f.secondUsername) ==false)
                             {
-                                Console.WriteLine(f.secondUsername.ToString());
+                                Console.WriteLine(f.secondUsername);
                                 friendRequestList.Items.Add(f.secondUsername);
                             }
                         }
@@ -740,7 +769,84 @@ namespace CryptMessage
 
             }));
         }
+        static byte[] Encrypt(string plainText, byte[] Key, byte[] IV)
+        {
+            // Check arguments.
+            if (plainText == null || plainText.Length <= 0)
+                throw new ArgumentNullException("plainText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("IV");
+            byte[] encrypted;
 
+            // Create an Aes object
+            // with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create an encryptor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(plainText);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+            // Return the encrypted bytes from the memory stream.
+            return encrypted;
+        }
+        static string Decrypt(byte[] cipherText, byte[] Key, byte[] IV)
+        {
+            // Check arguments.
+            if (cipherText == null || cipherText.Length <= 0)
+                throw new ArgumentNullException("cipherText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("IV");
+
+            // Declare the string used to hold the decrypted text.
+            string plaintext = null;
+
+            // Create an Aes object with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decryptor to perform the stream transform.
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for decryption.
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            // Read the decrypted bytes from the decrypting stream
+                            // and place them in a string.
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            return plaintext;
+        }
 
         #endregion
     }
